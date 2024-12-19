@@ -1,44 +1,6 @@
 #H.264 入门篇 - 00 (简介)
 **目录**
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 参考资料：
 
 >  
@@ -73,7 +35,7 @@ Extended Profile 用于改进误码性能和码流切换（SP和SI slice），�
 
 High Profile 主要用于高压缩效率和质量， 引入8x8 DCT，选择量化矩阵等。
 
-<img alt="" height="968" src="https://i-blog.csdnimg.cn/blog_migrate/a90ee257a2cc0705e208cdde99204fff.png" width="690">
+<img alt="" height="968" src="images/H.264 入门篇 - 00 (简介)/a90ee257a2cc0705e208cdde99204fff.png" width="690">
 
 一段码流的 profile 信息，会被编码到码流的 SPS (Sequence Paramater Set) 中的 profile_idc 字段 (详见 T-REC-H.264 的官方文档的 Annex A – Profiles and levels )：
 
@@ -92,7 +54,7 @@ High Profile 主要用于高压缩效率和质量， 引入8x8 DCT，选择量�
 
 H.264 的 Level 指示编码的分辨率、比特率、宏块数和帧率等。具体如下图：
 
-<img alt="" height="970" src="https://i-blog.csdnimg.cn/blog_migrate/e67cb871019e82a620c736493f72e907.png" width="664">
+<img alt="" height="970" src="images/H.264 入门篇 - 00 (简介)/e67cb871019e82a620c736493f72e907.png" width="664">
 
 一段码流的 level 信息，会被编码到码流的 SPS (Sequence Paramater Set) 中的 level_idc 字段 (详见 T-REC-H.264 的官方文档的 Annex A – Profiles and levels )：
 
@@ -110,7 +72,7 @@ H.264 编码过程分为了 Video Coding Layer (VCL) 和 Network Abstraction Lay
 
 下图展示了编码的整个过程：
 
-<img alt="" height="649" src="https://i-blog.csdnimg.cn/blog_migrate/2e7309addfa4673f9b4b8ef71b44139e.png" width="1063">
+<img alt="" height="649" src="images/H.264 入门篇 - 00 (简介)/2e7309addfa4673f9b4b8ef71b44139e.png" width="1063">
 
 这个编码过程，包含了帧内预测 (Intra-frame) 和帧间预测 (Motion)，这里有一个开关 (Intra/Inter MB select)，用于确定当前是帧内还是帧间处理；
 
@@ -118,7 +80,7 @@ H.264 编码过程分为了 Video Coding Layer (VCL) 和 Network Abstraction Lay
 
 下面会拆解整个流程，分段进行描述；
 
-<img alt="" height="803" src="https://i-blog.csdnimg.cn/blog_migrate/1e5136c6543c51809762fa1469f44e5a.png" width="1200">
+<img alt="" height="803" src="images/H.264 入门篇 - 00 (简介)/1e5136c6543c51809762fa1469f44e5a.png" width="1200">
 
 ### 4.1、数据切分
 
@@ -128,19 +90,19 @@ H.264 编码过程分为了 Video Coding Layer (VCL) 和 Network Abstraction Lay
 
 每个 Macroblock 还可以分为子 Block；
 
-<img alt="" height="748" src="https://i-blog.csdnimg.cn/blog_migrate/d073e0a947e7152e825952ef9bee6fbc.png" width="1091">
+<img alt="" height="748" src="images/H.264 入门篇 - 00 (简介)/d073e0a947e7152e825952ef9bee6fbc.png" width="1091">
 
 #### 4.1.1、Macroblock (宏块)
 
 H.264 使用基础的 16x16 Macroblock；除了 16x16，还可以细分为如下类型宏块；
 
-<img alt="" height="462" src="https://i-blog.csdnimg.cn/blog_migrate/b589e2535a59dbae41c61d5624f2a389.png" width="1093">
+<img alt="" height="462" src="images/H.264 入门篇 - 00 (简介)/b589e2535a59dbae41c61d5624f2a389.png" width="1093">
 
 每个分割的或者子宏块，都有独立的运动向量 (MV)，并且需要被编码和传输；
 
 使用 Elecard StreamEye Tools 工具抓取 H.264 的 P 帧，进行 Macroblock 分析如下所示：
 
-<img alt="" height="817" src="https://i-blog.csdnimg.cn/blog_migrate/3011885fdba5d4e9177146c4303c3397.png" width="1001">
+<img alt="" height="817" src="images/H.264 入门篇 - 00 (简介)/3011885fdba5d4e9177146c4303c3397.png" width="1001">
 
 ### 4.2、帧内预测 (Intra-Frame Prediction)
 
@@ -156,11 +118,11 @@ H.264的帧内压缩与JPEG很相似。一幅图像被划分好 Macroblock 后�
 - 16×16大小的亮度块：4种预测模式- 4×4大小的亮度块：9种预测模式- 8×8 色度块：4种预测模式，同16×16的亮度块
 16×16亮度块和色度块的4种预测模式如下图：
 
-<img alt="" height="312" src="https://i-blog.csdnimg.cn/blog_migrate/5212be21a33a5a00e90e98716234b41f.png" width="578">
+<img alt="" height="312" src="images/H.264 入门篇 - 00 (简介)/5212be21a33a5a00e90e98716234b41f.png" width="578">
 
 4×4亮度块的9种预测模式如下图表示：
 
-<img alt="" height="697" src="https://i-blog.csdnimg.cn/blog_migrate/07f20b7c0d0d3e6c99b1231d146e5846.png" width="1004">
+<img alt="" height="697" src="images/H.264 入门篇 - 00 (简介)/07f20b7c0d0d3e6c99b1231d146e5846.png" width="1004">
 
 >  
  DC 模式用上方和左方相邻像素的均值表示整个预测块 
@@ -168,19 +130,19 @@ H.264的帧内压缩与JPEG很相似。一幅图像被划分好 Macroblock 后�
 
 帧内预测后，与真实图像比较如下：
 
-<img alt="" height="428" src="https://i-blog.csdnimg.cn/blog_migrate/d5f563ad8e35480049336a98ad6b9593.png" width="753">
+<img alt="" height="428" src="images/H.264 入门篇 - 00 (简介)/d5f563ad8e35480049336a98ad6b9593.png" width="753">
 
 此刻，我们得到了基于 Macroblock 的预测方式 (预测向量)，我们再用预测的图像与真实的图像做残差：
 
-<img alt="" height="243" src="https://i-blog.csdnimg.cn/blog_migrate/95b269dcc0ece2e4595f92048c09ce1e.png" width="473">
+<img alt="" height="243" src="images/H.264 入门篇 - 00 (简介)/95b269dcc0ece2e4595f92048c09ce1e.png" width="473">
 
 再将我们之前得到的预测模式信息一起保存起来，这样我们就可以在解码时恢复原图了；
 
-<img alt="" height="339" src="https://i-blog.csdnimg.cn/blog_migrate/845609761a01414c48c395a10e04c72a.png" width="604">
+<img alt="" height="339" src="images/H.264 入门篇 - 00 (简介)/845609761a01414c48c395a10e04c72a.png" width="604">
 
 过程如下：
 
-<img alt="" height="584" src="https://i-blog.csdnimg.cn/blog_migrate/2adc97412f691592d2abaff9a92c7595.png" width="417">
+<img alt="" height="584" src="images/H.264 入门篇 - 00 (简介)/2adc97412f691592d2abaff9a92c7595.png" width="417">
 
 ### 4.3、帧间预测 (Inter-Frame Prediction)
 
@@ -188,7 +150,7 @@ H.264 帧间预测是利用**先前编码帧的重建图像**作为参考，对�
 
 H.264/AVC帧间预测的区别在于块尺寸更丰富，采用了1/4精度运动矢量、多参考帧等方法。
 
-<img alt="" height="302" src="https://i-blog.csdnimg.cn/blog_migrate/3269f8b2bc89614ba2117e82194e085c.png" width="608">
+<img alt="" height="302" src="images/H.264 入门篇 - 00 (简介)/3269f8b2bc89614ba2117e82194e085c.png" width="608">
 
 通过宏块扫描与宏块搜索可以发现这两个帧的关联度是非常高的。进而发现这一组帧的关联度都是非常高的。因此，上面这几帧就可以划分为一组。其算法是：在相邻几幅图像画面中，一般有差别的像素只有10%以内的点,亮度差值变化不超过2%，而色度差值的变化只有1%以内，我们认为这样的图可以分到一组。
 
@@ -200,7 +162,7 @@ H.264/AVC帧间预测的区别在于块尺寸更丰富，采用了1/4精度运�
 
 帧间预测使用的宏块类型如下：
 
-<img alt="" height="462" src="https://i-blog.csdnimg.cn/blog_migrate/279fbee40d4d8e61442f415df7df3dc5.png" width="1093">
+<img alt="" height="462" src="images/H.264 入门篇 - 00 (简介)/279fbee40d4d8e61442f415df7df3dc5.png" width="1093">
 
 **每个分割或子宏块都有一个独立的运动补偿。每个运动矢量都须被编码、传输，分割的选择也要将编码压缩到比特流中。**
 
@@ -214,15 +176,15 @@ H.264/AVC帧间预测的区别在于块尺寸更丰富，采用了1/4精度运�
 
 H264将两帧视频数据进行宏块扫描。当发现其中一幅图片中有物体时，就在另一幅图的邻近位置（搜索窗口中）进行搜索。如果此时在另一幅图中找到该物体，那么就可以计算出物体的运动矢量了。下面这幅图就是搜索后的台球移动的位置。
 
-<img alt="" height="305" src="https://i-blog.csdnimg.cn/blog_migrate/5348b53df3a90283e8c69426ff0a9ffe.png" width="403">
+<img alt="" height="305" src="images/H.264 入门篇 - 00 (简介)/5348b53df3a90283e8c69426ff0a9ffe.png" width="403">
 
 通过上图中台球位置相差，就可以计算出台图运行的方向和距离。H264依次把每一帧中球移动的距离和方向都记录下来就成了下面的样子
 
-<img alt="" height="337" src="https://i-blog.csdnimg.cn/blog_migrate/cd7f80b572197637fb0815afff6ddf98.png" width="636">
+<img alt="" height="337" src="images/H.264 入门篇 - 00 (简介)/cd7f80b572197637fb0815afff6ddf98.png" width="636">
 
 运动矢量计算出来后，将相同部分（也就是绿色部分）减去，就得到了**补偿数据**。我们最终只需要将补偿数据进行压缩保存，以后在解码时 (加上运动矢量) 就可以恢复原图了。压缩补偿后的数据只需要记录很少的一点数据。如下所示：
 
-<img alt="" height="367" src="https://i-blog.csdnimg.cn/blog_migrate/e36657d7243610b8c8f6b2590c056417.png" width="612">
+<img alt="" height="367" src="images/H.264 入门篇 - 00 (简介)/e36657d7243610b8c8f6b2590c056417.png" width="612">
 
 注意：帧间预测是利用先前编码帧的重建图像作为参考，对当前图像进行预测编码
 
@@ -236,7 +198,7 @@ H264将两帧视频数据进行宏块扫描。当发现其中一幅图片中有�
 
 H.264/AVC中的宏块大小为16×16，对其中每个4×4大小的块进行4×4的整数DCT变换后，得到16个4×4的变换矩阵。为了进一步提高压缩效率，该协议还允许把每个4×4的变换矩阵中的直流分量DC，单独取出组成一个新的4×4矩阵，对此矩阵进行Hadamard变换。整数DCT避免了以往标准中的编解码不匹配问题，使得反变换不会出现失衡的问题。并且其运算只包含加减和移位，且将量化融合在其中，有效的降低了运算量。H.264/AVC编码中整数变换及量化过程如图6-9所示。宏块的数据传送顺序如图6-10所示，图中上方的-1、16、17为直流分量形成的4×4、2×2块。
 
-<img alt="" height="689" src="https://i-blog.csdnimg.cn/blog_migrate/783808a5ad569bfdda8f5c7c80d8a75c.png" width="1160">
+<img alt="" height="689" src="images/H.264 入门篇 - 00 (简介)/783808a5ad569bfdda8f5c7c80d8a75c.png" width="1160">
 
 ### 4.5、量化 (Quantization)
 
@@ -248,17 +210,17 @@ H.264/AVC中的宏块大小为16×16，对其中每个4×4大小的块进行4×4
 
 q(x, y) = round(F(x, y) / Q + 0.5);
 
-<img alt="" height="255" src="https://i-blog.csdnimg.cn/blog_migrate/6c48b9b88102d9c125dfa19ab496e8df.png" width="572">
+<img alt="" height="255" src="images/H.264 入门篇 - 00 (简介)/6c48b9b88102d9c125dfa19ab496e8df.png" width="572">
 
 再经过锯齿扫描 zig-zag（之字扫描）
 
-<img alt="" height="416" src="https://i-blog.csdnimg.cn/blog_migrate/e204fd53ceb9b9395a19478979099da2.png" width="429">
+<img alt="" height="416" src="images/H.264 入门篇 - 00 (简介)/e204fd53ceb9b9395a19478979099da2.png" width="429">
 
 将二维数组转换成一维数组，例如上面量化后数据，可以以9、0、-1、0、-1、0、0、0、0、0、0、0、0、0、0、0形式保存在一维数组里面。下面就可以 将这些数据进行熵编码，继续压缩了。
 
 FFmpeg 的标志，就来源于这个 zig-zag 扫描；
 
-<img alt="" height="170" src="https://i-blog.csdnimg.cn/blog_migrate/fb6890dd7e183856ca7c7c824ea08e0e.png" width="283">
+<img alt="" height="170" src="images/H.264 入门篇 - 00 (简介)/fb6890dd7e183856ca7c7c824ea08e0e.png" width="283">
 
 ### 4.6、熵编码 (entropy coding)
 
@@ -276,13 +238,13 @@ H.264/AVC协议对于图像数据或残差提供了两种熵编码的方式，�
 
 去块滤波，也叫环路滤波，它的作用是，消除经反量化和反变换后，**重建图像**中由于预测误差产生的块效应，即块边缘处的像素值跳变，从而一来改善图像的主观质量，二来减少预测误差。
 
-<img alt="" height="669" src="https://i-blog.csdnimg.cn/blog_migrate/e3f026eeb6c472a5462b4fe6eb9d6e74.png" width="1144">
+<img alt="" height="669" src="images/H.264 入门篇 - 00 (简介)/e3f026eeb6c472a5462b4fe6eb9d6e74.png" width="1144">
 
 H.264/AVC中的 Deblocking Filter还能够根据图像内容做出判断，只对由于块效应产生的像素值跳变进行平滑，而对图像中物体边缘处的像素值不连续给予保留，以免造成边缘模糊。与以往的Deblocking Filter不同的是，经过滤波后的图像将根据需要放在缓存中用于帧间预测，而不是仅仅在输出重建图像时用来改善主观质量，也就是说该滤波器位于解码环中，而非解码环的输出外，因而它又称作环路滤波 Loop Filter。需要注意的是，对于帧内预测，使用的是未经过滤波的重建图像。
 
-<img alt="" height="658" src="https://i-blog.csdnimg.cn/blog_migrate/23788e84de287a48fec094dc62412605.png" width="1162">
+<img alt="" height="658" src="images/H.264 入门篇 - 00 (简介)/23788e84de287a48fec094dc62412605.png" width="1162">
 
-<img alt="" height="600" src="https://i-blog.csdnimg.cn/blog_migrate/29ae87eec3111da10ed53405f2bd270b.png" width="1079">
+<img alt="" height="600" src="images/H.264 入门篇 - 00 (简介)/29ae87eec3111da10ed53405f2bd270b.png" width="1079">
 
 ### 4.8、其他
 
@@ -290,7 +252,7 @@ H.264/AVC中的 Deblocking Filter还能够根据图像内容做出判断，只�
 
 以往的P帧编码是以前面重建的帧作为参考，进行运动估计预测得到最佳匹配块。B帧编码同样是以前后重建帧为参考预测得到残差。H.264/AVC提供了多个参考帧的帧间预测模式，使估计到的宏块更贴近实际运动物体模型，运动向量表示更精确。但在选用多帧参考的同时，计算量巨增；
 
-<img alt="" height="563" src="https://i-blog.csdnimg.cn/blog_migrate/c516f95d9df360784580ad13964776cc.png" width="855">
+<img alt="" height="563" src="images/H.264 入门篇 - 00 (简介)/c516f95d9df360784580ad13964776cc.png" width="855">
 
 ## 5、开源软件
 
@@ -306,6 +268,6 @@ H.264是一种视频压缩标准，其只规定了符合标准的码流的格式
 
 总览：
 
-<img alt="" height="1200" src="https://i-blog.csdnimg.cn/blog_migrate/36a787e6882101df9c901bc092730e0d.png" width="1200">
+<img alt="" height="1200" src="images/H.264 入门篇 - 00 (简介)/36a787e6882101df9c901bc092730e0d.png" width="1200">
 
  

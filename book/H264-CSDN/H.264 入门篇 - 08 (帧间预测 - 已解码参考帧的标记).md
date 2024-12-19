@@ -33,7 +33,7 @@
 
 前面我们知道了，编码过程中，会将已编码的图像进行解码，然后放入到 DPB 缓存，用于后续的使用；放入到 DPB 
 
-<img alt="" height="727" src="https://i-blog.csdnimg.cn/blog_migrate/579c86375a8265864b5a57d499b5a02e.png" width="1055">
+<img alt="" height="727" src="images/H.264 入门篇 - 08 (帧间预测 - 已解码参考帧的标记)/579c86375a8265864b5a57d499b5a02e.png" width="1055">
 
 ## 0、已解码参考帧标记
 
@@ -81,7 +81,7 @@
 
 执行自适应内存控制法标记参考帧的条件是 adaptive_ref_pic_marking_mode_flag 为1，此时slice_header中会包含一些附加的语法元素信息 (dec_ref_pic_marking)：
 
-<img alt="" height="660" src="https://i-blog.csdnimg.cn/blog_migrate/a23bbecc8245292f4bf4143d80690ad3.png" width="845">
+<img alt="" height="660" src="images/H.264 入门篇 - 08 (帧间预测 - 已解码参考帧的标记)/a23bbecc8245292f4bf4143d80690ad3.png" width="845">
 
 从上图的dec_ref_pic_marking结构中可以看出，如果adaptive_ref_pic_marking_mode_flag的值为1，那么其中将会多出若干个值：
 - memory_management_control_operation；- difference_of_pic_nums_minus1；- long_term_pic_num；- long_term_frame_idx；- max_long_term_frame_idx_plus1

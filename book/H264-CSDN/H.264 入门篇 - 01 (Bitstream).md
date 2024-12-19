@@ -71,7 +71,7 @@ H.264 的 Bitstream 的封装如下所示：
 
 后面的同步字段是 0x00, 0x00, 0x01;
 
-<img alt="" height="231" src="https://i-blog.csdnimg.cn/blog_migrate/bf22db7f62957caefd11225e715b7b07.png" width="1044">
+<img alt="" height="231" src="images/H.264 入门篇 - 01 (Bitstream)/bf22db7f62957caefd11225e715b7b07.png" width="1044">
 
 NAL 是 H.264 最基本的数据存储单元，它可以存储很多类型的数据，前面说过，H.264 呢，不仅仅只包含了码流部分，也保留了很多的信息来描述编码的码流信息，如：帧、颜色、使用的参数等；所以这里 NAL 的真实 Payload 就有很多种类型；
 
@@ -83,7 +83,7 @@ NAL Unit 分为了 [ Header (1 Byte) + Payload ] 部分；
 
 header 部分包含了如下内容
 - forbidden_bit (1 bit)：传输中发生错误时，会被置为1，告诉接收方丢掉该单元；否则为 0；- nal_ref_idc (2 bit)：指示当前 NALU 的优先级，或者说重要性，数值越大表明越重要；- nal_unit_type (5 bit)：表示 NALU 的类型；
-<img alt="" height="873" src="https://i-blog.csdnimg.cn/blog_migrate/1da826472f3031d32774002a043b4703.png" width="682">
+<img alt="" height="873" src="images/H.264 入门篇 - 01 (Bitstream)/1da826472f3031d32774002a043b4703.png" width="682">
 
 nal_type_id 如下所示：红色部分是对应到 H.264 SEPC 的第 7 章-语法语义（T-REC-H.264）
 
@@ -255,7 +255,7 @@ EBSP 抽出 0x03 后，变成了 RBSP；
 
 RBSP 抽出尾部的 Padding 后，构成了真实的有效负载部分；
 
-<img alt="" height="733" src="https://i-blog.csdnimg.cn/blog_migrate/8a1541880ed3f3d342c15aa08b141c22.png" width="764">
+<img alt="" height="733" src="images/H.264 入门篇 - 01 (Bitstream)/8a1541880ed3f3d342c15aa08b141c22.png" width="764">
 
 **1.2.2.1、EBSP**
 
@@ -285,7 +285,7 @@ SODB 英文全称 String Of Data Bits，称原始数据比特流，就是最原�
 
 如果我们将nal_type_id 来区分不同的 NAL，如下所示：
 
-<img alt="" height="739" src="https://i-blog.csdnimg.cn/blog_migrate/281ff6a8108ea68910a54a0c329dd220.png" width="1200">
+<img alt="" height="739" src="images/H.264 入门篇 - 01 (Bitstream)/281ff6a8108ea68910a54a0c329dd220.png" width="1200">
 
 ## 2、语法和语义
 
@@ -293,7 +293,7 @@ H.264 的 Annex B规定了 NAL Unit 组成 NAL 单元流的方式，对于面向
 
 它的描述非常类似于代码：
 
-<img alt="" height="893" src="https://i-blog.csdnimg.cn/blog_migrate/0485830c1b9905de6c3930b52cd04994.png" width="717">
+<img alt="" height="893" src="images/H.264 入门篇 - 01 (Bitstream)/0485830c1b9905de6c3930b52cd04994.png" width="717">
 
 第一列代表了语法；
 
@@ -305,17 +305,17 @@ H.264 的 Annex B规定了 NAL Unit 组成 NAL 单元流的方式，对于面向
 - ae(v)：上下文自适应算术熵编码语法元素。- b(8)：任意形式的8比特字节。该描述符的解析过程通过函数read_bits( 8 )的返回值来规定。- ce(v)：左位在先的上下文自适应可变长度熵编码语法元素。- f(n)：n位固定模式比特串（由左至右），左位在先， 该描述符的解析过程通过函数read_bits( n )的返回值来规定。- i(n)：使用n比特的有符号整数。在语法表中，如果n是‘v’，其比特数由其它语法元素值确定。解析过程由函数read_bits(n)的返回值规定，该返回值用最高有效位在前的2的补码表示- me(v)：映射的指数哥伦布码编码的语法元素，左位在先。- se(v)：有符号整数指数哥伦布码编码的语法元素位在先。- te(v)：舍位指数哥伦布码编码语法元素，左位在先。- u(n)：n位无符号整数。在语法表中，如果n是‘v’，其比特数由其它语法元素值确定。解析过程由函数read_bits(n)的返回值规定，该返回值用最高有效位在前的二进制表示。- ue(v)：无符号整数指数哥伦布码编码的语法元素，左位在先。
 比如，一个 NAL Unit 的表示为：
 
-<img alt="" height="497" src="https://i-blog.csdnimg.cn/blog_migrate/584ec73f65bbf8b701d91153807c6c9b.png" width="957">
+<img alt="" height="497" src="images/H.264 入门篇 - 01 (Bitstream)/584ec73f65bbf8b701d91153807c6c9b.png" width="957">
 
 黑色加粗的部分，我打了红色标记，代表了一个 NAL Unit 的组成，这里我们可以看到，为了防止竞争，而插入的 0x03 字节；
 
-<img alt="" height="866" src="https://i-blog.csdnimg.cn/blog_migrate/ae9f0c7f84824712135d603380cbf798.png" width="1200">
+<img alt="" height="866" src="images/H.264 入门篇 - 01 (Bitstream)/ae9f0c7f84824712135d603380cbf798.png" width="1200">
 
 所以，这里我们知道了，H.264 使用图表 + 伪代码的方式向我们展现了它的比特流的定义；
 
 NAL Unit 解析的时候，根据不同的 nal_unit_type 走到不同的解析解码流程表格，这些表格都在 H.264 的官方文档种有明确定义；
 
-<img alt="" height="757" src="https://i-blog.csdnimg.cn/blog_migrate/5b2397bec6eb944d395f9ee2979a5c11.png" width="1200">
+<img alt="" height="757" src="images/H.264 入门篇 - 01 (Bitstream)/5b2397bec6eb944d395f9ee2979a5c11.png" width="1200">
 
 ## 3、SPS 数据语法 (Sequence parameter set data syntax)
 
@@ -329,11 +329,11 @@ Sequence parameter set data 简称 SPS（序列参数集），SPS 中保存了�
 
 SPS 的结构位于 H.264 准协议文档的 7.3.2.1 部分:
 
-<img alt="" height="918" src="https://i-blog.csdnimg.cn/blog_migrate/5cc3bfebeaebdab81d47b84f48a4e859.png" width="874">
+<img alt="" height="918" src="images/H.264 入门篇 - 01 (Bitstream)/5cc3bfebeaebdab81d47b84f48a4e859.png" width="874">
 
-<img alt="" height="469" src="https://i-blog.csdnimg.cn/blog_migrate/68c2e44661005db17b071589120dcfbc.png" width="875">
+<img alt="" height="469" src="images/H.264 入门篇 - 01 (Bitstream)/68c2e44661005db17b071589120dcfbc.png" width="875">
 
-<img alt="" height="533" src="https://i-blog.csdnimg.cn/blog_migrate/b0aff4eb0addf5a5fe81af08c0c4f53a.png" width="879">
+<img alt="" height="533" src="images/H.264 入门篇 - 01 (Bitstream)/b0aff4eb0addf5a5fe81af08c0c4f53a.png" width="879">
 
 下面将关键的参数罗列一下；
 
@@ -364,7 +364,7 @@ SPS 的结构位于 H.264 准协议文档的 7.3.2.1 部分:
 
 标识当前码流的 Level。编码的Level定义了某种条件下的最大视频分辨率、最大视频帧率等参数，码流所遵从的 level 由 level_idc 指定。
 
-<img alt="" height="970" src="https://i-blog.csdnimg.cn/blog_migrate/074ee2b26d9ab0a58357ee7cd939de06.png" width="664">
+<img alt="" height="970" src="images/H.264 入门篇 - 01 (Bitstream)/074ee2b26d9ab0a58357ee7cd939de06.png" width="664">
 
 3.2.3、constraint_set0_flag
 
@@ -382,7 +382,7 @@ SPS 的结构位于 H.264 准协议文档的 7.3.2.1 部分:
 
 — 如果 profile_idc 等于66、77或88（Baseline、Main、Extended）并且 level_idc 等于 11，constraint_set3_flag 等于 1 是指该比特流遵从附件A中对级别1b的所有规定，constraint_set3_flag等于0是指该比特流可以遵从也可以不遵从附件A中有关1b级别的所有规定。
 
-<img alt="" height="565" src="https://i-blog.csdnimg.cn/blog_migrate/16e1afd2f68f0d52b32aaa52b13fa092.png" width="861">
+<img alt="" height="565" src="images/H.264 入门篇 - 01 (Bitstream)/16e1afd2f68f0d52b32aaa52b13fa092.png" width="861">
 
 — 否则（profile_idc 等于100、110、122或144或level_ idc不等于 11），constraint_set3_flag 等于1留作未来 ITU-T | ISO/IEC 使用。当profile_idc等于100、110、122或144或level_ idc不等于 11时，比特流中constraint_set3_flag 应等于0。当profile_idc等于100、110、122或144或level_ idc不等于 11时，国际标准的解码器将忽略 constraint_set3_flag 的值。
 
@@ -402,19 +402,19 @@ SPS 的结构位于 H.264 准协议文档的 7.3.2.1 部分:
 
 当 (profile_id==100 || profile_id==110 || profile_id==122 || profile_id==144) 的有这个域，也就是 High Profile 的时候色度采样，值在 0~3 之间；
 
-<img alt="" height="136" src="https://i-blog.csdnimg.cn/blog_migrate/befb1ee14e5fdd69d9929c66048caee6.png" width="532">
+<img alt="" height="136" src="images/H.264 入门篇 - 01 (Bitstream)/befb1ee14e5fdd69d9929c66048caee6.png" width="532">
 
 当 chroma_format_idc 不存在的时候，默认为 1，即 (4:2:0);
 
 下面是一个 High Profile 带 chroma_format_idc 的例子（使用 Elecard StreamEye Analyzer 分析）
 
-<img alt="" height="703" src="https://i-blog.csdnimg.cn/blog_migrate/e85254bc2247cfad210394ed63956d8b.png" width="799">
+<img alt="" height="703" src="images/H.264 入门篇 - 01 (Bitstream)/e85254bc2247cfad210394ed63956d8b.png" width="799">
 
 3.2.10、residual_colour_transform_flag
 
 当采样为 4:4:4 的时候，会存在 residual_colour_transform_flag 这个值；
 
-<img alt="" height="62" src="https://i-blog.csdnimg.cn/blog_migrate/78bc870dced3104c079dc94b07688daa.png" width="837">
+<img alt="" height="62" src="images/H.264 入门篇 - 01 (Bitstream)/78bc870dced3104c079dc94b07688daa.png" width="837">
 
 residual_colour_transform_flag 值等于1时 ，使用 SPEC 8.5 节规定的残差颜色变换 。
 
@@ -450,7 +450,7 @@ bit_depth_chroma_minus8 取值范围应该在 0 到 4 之间（包括 0 和 4）
 
 用于计算 MaxFrameNum 的值。计算公式为
 
-<img alt="" height="40" src="https://i-blog.csdnimg.cn/blog_migrate/e2f9e0d40e28124bff32f8d1665537b8.png" width="334">
+<img alt="" height="40" src="images/H.264 入门篇 - 01 (Bitstream)/e2f9e0d40e28124bff32f8d1665537b8.png" width="334">
 
 MaxFrameNum = 2^(log2_max_frame_num_minus4 + 4)
 
@@ -500,7 +500,7 @@ PicWidthInSamplesC = PicWidthInMbs * 8
 
 比如：
 
-<img alt="" height="888" src="https://i-blog.csdnimg.cn/blog_migrate/014abd1bc8e4d203698ad6dffdd2e51b.png" width="799">
+<img alt="" height="888" src="images/H.264 入门篇 - 01 (Bitstream)/014abd1bc8e4d203698ad6dffdd2e51b.png" width="799">
 
 PicWidthInMbs = 79 + 1 = 80
 
@@ -542,7 +542,7 @@ PicSizeInMbs = PicWidthInMbs * PicHeightInMbs
 
 与上面同一个视频的例子：
 
-<img alt="" height="888" src="https://i-blog.csdnimg.cn/blog_migrate/7f6124d0461f8dfca3ffe5be0cd76f49.png" width="799">
+<img alt="" height="888" src="images/H.264 入门篇 - 01 (Bitstream)/7f6124d0461f8dfca3ffe5be0cd76f49.png" width="799">
 
 PicHeightInMapUnits = 44 + 1 = 45；
 
@@ -552,7 +552,7 @@ PicHeightInMbs = 45 / ( 1 + field_pic_flag )
 
 field_pic_flag 如果没有的话，就是 0；所以：
 
-<img alt="" height="295" src="https://i-blog.csdnimg.cn/blog_migrate/654e8b8344daf394ca530f0073ddb6fe.png" width="787">
+<img alt="" height="295" src="images/H.264 入门篇 - 01 (Bitstream)/654e8b8344daf394ca530f0073ddb6fe.png" width="787">
 
 PicHeightInMbs = 45；
 
@@ -612,11 +612,11 @@ void x264_sps_init( x264_sps_t *sps, int i_id, x264_param_t *param ) bool x264_a
 
 PPS 的语法如下：
 
-<img alt="" height="892" src="https://i-blog.csdnimg.cn/blog_migrate/d6eadee33f4f8e1681357daee314816e.png" width="702">
+<img alt="" height="892" src="images/H.264 入门篇 - 01 (Bitstream)/d6eadee33f4f8e1681357daee314816e.png" width="702">
 
-<img alt="" height="302" src="https://i-blog.csdnimg.cn/blog_migrate/33819b06d456378afbae53c5a183dc9a.png" width="703">
+<img alt="" height="302" src="images/H.264 入门篇 - 01 (Bitstream)/33819b06d456378afbae53c5a183dc9a.png" width="703">
 
-<img alt="" height="179" src="https://i-blog.csdnimg.cn/blog_migrate/06ad963aaa030f2c6a09b683e35cb038.png" width="704">
+<img alt="" height="179" src="images/H.264 入门篇 - 01 (Bitstream)/06ad963aaa030f2c6a09b683e35cb038.png" width="704">
 
 4.2.1、pic_parameter_set_id
 
@@ -674,7 +674,7 @@ PPS 的语法如下：
 
 工具也可以解析 PPS：
 
-<img alt="" height="525" src="https://i-blog.csdnimg.cn/blog_migrate/c8c3d66d8baea1efe814d936b5b89208.png" width="834">
+<img alt="" height="525" src="images/H.264 入门篇 - 01 (Bitstream)/c8c3d66d8baea1efe814d936b5b89208.png" width="834">
 
 ## 5、Slice RBSP 数据语法(slice_layer_without_partitioning_rbsp)
 
@@ -682,7 +682,7 @@ PPS 的语法如下：
 
 我们知道编码是以slice为单位的，这个结构内包含的就是视频中编码的主要内容，视频图像进行编码后就会包含在这个结构内，也就是说编码后的码流中，大多数都是以这个结构的RBSP打包成的NAL unit
 
-<img alt="" height="133" src="https://i-blog.csdnimg.cn/blog_migrate/886e02d52da4d56bbab8b17fb81c6c9f.png" width="702">
+<img alt="" height="133" src="images/H.264 入门篇 - 01 (Bitstream)/886e02d52da4d56bbab8b17fb81c6c9f.png" width="702">
 
 可以看到，slice_layer_without_partitioning_rbsp 流程分为了 3 部分；
 
@@ -696,11 +696,11 @@ rbsp_slice_trailing_bits(); -- RBSP 尾部按字节补齐的部分；
 
 Slice 首先是 header 部分，slice_header 包含的是本 slice 相关的参数，如下；
 
-<img alt="" height="848" src="https://i-blog.csdnimg.cn/blog_migrate/8a6d19bdc50746223d5f58f53f624a91.png" width="706">
+<img alt="" height="848" src="images/H.264 入门篇 - 01 (Bitstream)/8a6d19bdc50746223d5f58f53f624a91.png" width="706">
 
-<img alt="" height="297" src="https://i-blog.csdnimg.cn/blog_migrate/1d0a1d350b34c43eb7d319333212c165.png" width="706">
+<img alt="" height="297" src="images/H.264 入门篇 - 01 (Bitstream)/1d0a1d350b34c43eb7d319333212c165.png" width="706">
 
-<img alt="" height="329" src="https://i-blog.csdnimg.cn/blog_migrate/28fa1917c6477fe254c6d0de9b6a7afb.png" width="707">
+<img alt="" height="329" src="images/H.264 入门篇 - 01 (Bitstream)/28fa1917c6477fe254c6d0de9b6a7afb.png" width="707">
 
 5.1.1、first_mb_in_slice
 
@@ -755,7 +755,7 @@ SI(SI slice)
 
 使用 Elecard Stream analyzer 查看：
 
-<img alt="" height="640" src="https://i-blog.csdnimg.cn/blog_migrate/d0e44a5c48fcb993996f094a70694ce7.png" width="1200">
+<img alt="" height="640" src="images/H.264 入门篇 - 01 (Bitstream)/d0e44a5c48fcb993996f094a70694ce7.png" width="1200">
 
 5.1.4、pic_parameter_set_id
 
@@ -763,7 +763,7 @@ SI(SI slice)
 
 Elecard Stream analyzer 查看，看到他们都属于 PPS ID = 0；
 
-<img alt="" height="639" src="https://i-blog.csdnimg.cn/blog_migrate/952e62d0e13d99eee56e6f12172b7891.png" width="1200">
+<img alt="" height="639" src="images/H.264 入门篇 - 01 (Bitstream)/952e62d0e13d99eee56e6f12172b7891.png" width="1200">
 
 5.1.5、frame_num
 
@@ -771,7 +771,7 @@ Elecard Stream analyzer 查看，看到他们都属于 PPS ID = 0；
 
 Elecard Stream analyzer 查看，看到 H.264 的视频前 3 帧 (I、P、P) 的 frame_num 分别为 0、1、2
 
-<img alt="" height="775" src="https://i-blog.csdnimg.cn/blog_migrate/56441f6f880f81543c785af1ab6ef2a0.png" width="1200">
+<img alt="" height="775" src="images/H.264 入门篇 - 01 (Bitstream)/56441f6f880f81543c785af1ab6ef2a0.png" width="1200">
 
 frame_num 不是一直递增的，详见 SPEC 描述；
 
@@ -829,11 +829,11 @@ PicSizeInMbs = PicWidthInMbs * PicHeightInMbs (7-26)
 
 使用 Elecard StreamAnalyzer ，选中 H.264 的第一帧 (I 帧) 查看如下：
 
-<img alt="" height="642" src="https://i-blog.csdnimg.cn/blog_migrate/eacda7d0758fb036dc8f15b38c2d126b.png" width="1200">
+<img alt="" height="642" src="images/H.264 入门篇 - 01 (Bitstream)/eacda7d0758fb036dc8f15b38c2d126b.png" width="1200">
 
 选中 H.264 的第2个关键帧 (I 帧) 查看：
 
-<img alt="" height="250" src="https://i-blog.csdnimg.cn/blog_migrate/334b615ac9d5ac55d9903df0a331a0e9.png" width="1200">
+<img alt="" height="250" src="images/H.264 入门篇 - 01 (Bitstream)/334b615ac9d5ac55d9903df0a331a0e9.png" width="1200">
 
 5.1.9、pic_order_cnt_lsb、delta_pic_order_cnt_bottom、delta_pic_order_cnt
 
@@ -855,15 +855,15 @@ PicSizeInMbs = PicWidthInMbs * PicHeightInMbs (7-26)
 
 slice_data是slice的主体部分，当前slice内的宏块编码后的信息都在其中；
 
-<img alt="" height="922" src="https://i-blog.csdnimg.cn/blog_migrate/ff97ca9f66812770884aba50e87f9f47.png" width="705">
+<img alt="" height="922" src="images/H.264 入门篇 - 01 (Bitstream)/ff97ca9f66812770884aba50e87f9f47.png" width="705">
 
-<img alt="" height="81" src="https://i-blog.csdnimg.cn/blog_migrate/c1e3dec9df6aae6ac62381307ede5d87.png" width="703">
+<img alt="" height="81" src="images/H.264 入门篇 - 01 (Bitstream)/c1e3dec9df6aae6ac62381307ede5d87.png" width="703">
 - cabac_alignment_one_bit 如果是cabac，需要slice_data的头部8bit对齐，因此可能需要插入1- mb_skip_run 如果当前采用的是CAVLC编码方式，则会采用这个语法元素来表达 skip 宏块（P_Skip，B_Skip），mb_skip_run 代表的是当前这个宏块以及它的后面共有多少个跳过宏块，并且后面的 skip 宏块都不会被编码。- mb_skip_flag 如果当前采用的是CABAC编码方式，则会采用这个语法元素来表达skip宏块（P_Skip，B_Skip），跟mb_skip_run不同的是，每个skip宏块都有一个mb_skip_flag- macroblock_layer 如果不是为skip宏块的话，则表明本宏块有编码的数据，因此会进去macroblock_layer- end_of_slice_flag 如果采用的是CABAC编码方式，还会用这个标记来表达当前宏块是否为这个slice的最后一个宏块
 ### 5.3、宏块数据语法 (macroblock_layer)
 
-<img alt="" height="910" src="https://i-blog.csdnimg.cn/blog_migrate/df1bde4283b28a7b1464bfd001ab2a6b.png" width="705">
+<img alt="" height="910" src="images/H.264 入门篇 - 01 (Bitstream)/df1bde4283b28a7b1464bfd001ab2a6b.png" width="705">
 
-<img alt="" height="105" src="https://i-blog.csdnimg.cn/blog_migrate/e3d622e3e26c9447f61b4992c7a834ce.png" width="703">
+<img alt="" height="105" src="images/H.264 入门篇 - 01 (Bitstream)/e3d622e3e26c9447f61b4992c7a834ce.png" width="703">
 - mb_type 当前宏块的类型，对于不同的slice（I,P,B），同一个值会表示不同的类型。而且这个类型不仅仅表达宏块的预测模式，分割方式，还有其他的一些信息，请参考- pcm_alignment_zero_bit 在PCM情况下会要求进行字节对齐- pcm_sample_luma 亮度的PCM，一共有16x16个- pcm_sample_chroma 色度的PCM，根据yuv的格式不同会有不同的个数，一般的4:2:0格式有8x8x2个- sub_mb_pred 子宏块预测的语法结构，子宏块为8x8大小的宏块，也就是说一个宏块有4个子宏块，在这个语法结构的内部会进行4次子宏块预测<li>transform_size_8x8_flag 宏块所采用的变换方法0：4x4DCT；1：8x8DCT。变换方法请参考。按照上述语法描述，只有满足了以下条件码流中才会出现这个语法元素，如果该语法元素没出现在码流中则默认为0。 
   <ul>- Intra：总开关transform_8x8_mode_flag为1，并且宏块类型为I_NxN（参考，如果是I_8x8则为1，如果是I_4x4则为0）。- Inter：总开关transform_8x8_mode_flag为1，并且宏块的预测模式块不小于8x8。另外如果宏块采用了直接预测方式，并且预测模式为B_Direct_16x16，则需要direct_8x8_inference_flag为1。（此时码流中transform_size_8x8_flag的值为0或者1，是在编码端由算法自行决定的）。- Intra_16x16以及I_PCM的情况下码流中不存在该语法元素。- mb_pred 宏块预测的语法结构，宏块预测与子宏块预测的语法结构是相斥的，一个宏块的组成结构要么采用的是宏块预测的结构，要么4个子宏块都是子宏块的预测结构- coded_block_pattern 简称CBP，用来反映该宏块编码中残差情况的语法元素。CBP共有6位，其中前面2位代表UV分量，描述如下表所示；后面4位是Y分量，分别代表宏块内的4个8x8子宏块，如果任意一位为0，表明对应的8x8块中所有变换系数level（transform coefficient levels 也就是对像素残差进行变换、量化后的矩阵内的值，以后统称level）全部都是0，否则表明对应的8x8块中的变换系数level不全为0。另外需要注意的是，如果当前宏块的预测模式是Intra_16x16，则不会存在这个元素，此时CBP会由mb_type来表示，请参考。CBP的主要作用是加快解码速度，当一个块的残差都为0时，就不用对这个块进行残差解码了。| CodedBlockPatternChroma | Description 
 
@@ -882,27 +882,27 @@ Zero or more chroma DC transform coefficient levels are non-zero valued.
 
 ### 5.4、mb_perd 语法
 
-<img alt="" height="917" src="https://i-blog.csdnimg.cn/blog_migrate/666fe78cf1ce73d7497d22b66ccf37d4.png" width="702">
+<img alt="" height="917" src="images/H.264 入门篇 - 01 (Bitstream)/666fe78cf1ce73d7497d22b66ccf37d4.png" width="702">
 - prev_intra4x4_pred_mode_flag 如果当前宏块采用的是intra4x4的预测方式，则会存在这个语法元素，它的含义请参考- rem_intra4x4_pred_mode 如果当前宏块采用的是intra4x4的预测方式，则可能会存在这个语法元素，它的含义请参考- prev_intra8x8_pred_mode_flag 如果当前宏块采用的是intra8x8的预测方式，则会存在这个语法元素，它的含义请参考- rem_intra8x8_pred_mode 如果当前宏块采用的是intra8x8的预测方式，则可能会存在这个语法元素，它的含义请参考- intra_chroma_pred_mode intra chroma的预测模式，只有当前宏块的Luma部分采用intra预测时才会存在这个语法元素，它的含义请参考- ref_idx_l0 前向参考图像索引。如果当前宏块为inter预测，并且他的预测方式并非后向预测（即可能为前向预测或双向预测），则会存在这个语法元素- ref_idx_l1 后向参考图像索引。如果当前宏块为inter预测，并且他的预测方式并非前向预测（即可能为后向预测或双向预测），则会存在这个语法元素- mvd_l0 前向向量残差。如果当前宏块为inter预测，并且他的预测方式并非后向预测（即可能为前向预测或双向预测），则会存在这个语法元素- mvd_l1 后向向量残差。如果当前宏块为inter预测，并且他的预测方式并非前向预测（即可能为后向预测或双向预测），则会存在这个语法元素
 下图分别是几个mb_pred结构的例子
 - 在intra16x16的宏块模式下，intra16x16的宏块信息是被包含在mb_type里面的，因此mb_pred结构内只有chroma相关的信息- 在intra8x8的宏块模式下，共有四个子宏块，因此分成4个部分- 在intra4x4的宏块模式下，共有16个4x4块，因此分成16部分- 如果是Pslice的inter宏块，并且宏块采用16x8的分割方式，那么宏块会被分割成两部分，因此会有两个refIdx以及两个mvd- 如果是Bslice的inter宏块，并且宏块采用16x16的分割方式，那么宏块不会被分割，如果这个没被宏块采用的是双向预测方式，那么会有前、后向的refIdx以及mvd- 如果是Bslice的inter宏块，并且宏块采用8x16的分割方式，那么宏块会被分割成两部分，如果第一部分采用的是前向预测方式，第二部分采用的是双向预测方式，那么mb_pred内会有两个前向、一个后向refIdx以及mvd
-<img alt="" height="701" src="https://i-blog.csdnimg.cn/blog_migrate/c26c3c01cd36cafb24602d8a2ded80b9.png" width="857">
+<img alt="" height="701" src="images/H.264 入门篇 - 01 (Bitstream)/c26c3c01cd36cafb24602d8a2ded80b9.png" width="857">
 
 ### 5.5、sub_mb_pred 语法
 
-<img alt="" height="727" src="https://i-blog.csdnimg.cn/blog_migrate/1e679c81bb391bb2e4e258d4ff4ad280.png" width="717">
+<img alt="" height="727" src="images/H.264 入门篇 - 01 (Bitstream)/1e679c81bb391bb2e4e258d4ff4ad280.png" width="717">
 - sub_mb_type 子宏块模式，子宏块大小为8x8，因此一个宏块内有4个子宏块，也就会有4种子宏块模式，具体请参考- ref_idx_l0- ref_idx_l1 描述同mb_pred，不过需要注意的一点是，由于在8x8的子宏块中，分块（2个8x4块，4个4x4块等）是共用参考图像的，也就是说整个宏块最多也就只包含四个ref_idx- mvd_l0- mvd_l1 描述同mb_pred
 下面是一个sub_mb_pred语法结构的例子。假设处于Bslice，左边的表格分别代表四个子宏块的模式。在该sub_mb_pred结构中
 - 头部保存的是4个子宏块各自的子宏块类型- 接下来是前向refIdx，第一个子宏块的预测方式为Bi，因此有前向refIdx；第二个子宏块的预测方式为L0，也有前向refIdx；第三个子宏块为直接预测，没有refIdx；第四个子宏块为L0,有前向refIdx- 然后是后向refIdx，只有第一个子宏块的Bi会包含后向refIdx- 然后是前向mvd，第一个子宏块分割方式为4x8，分割成两个部分，因此有两个前向mvd；第二个子宏块分割方式为8x8，即不分割，因此只有一个前向mvd；第三个子宏块为直接预测，没有mvd；第四个子宏块分割方式为8x4，分割成两个部分，因此有两个前向mvd- 最后是后向mvd，例子中只有第一个子宏块，也就是采用Bi预测的会有后向mvd，由于第一个子宏块被分割成两部分，因此有两个后向mvd
 图例中，结构上面的数字代表了该语法元素所属的子宏块。
 
-<img alt="" height="380" src="https://i-blog.csdnimg.cn/blog_migrate/3b805b120f18ebc31b6fc569485f22ad.png" width="579">
+<img alt="" height="380" src="images/H.264 入门篇 - 01 (Bitstream)/3b805b120f18ebc31b6fc569485f22ad.png" width="579">
 
 ### 5.6、残差语法 - residual
 
-<img alt="" height="884" src="https://i-blog.csdnimg.cn/blog_migrate/ae69dcdb68d3eacaffaf7f93f9bdfd2b.png" width="700">
+<img alt="" height="884" src="images/H.264 入门篇 - 01 (Bitstream)/ae69dcdb68d3eacaffaf7f93f9bdfd2b.png" width="700">
 
-<img alt="" height="170" src="https://i-blog.csdnimg.cn/blog_migrate/8ffc4662da489ab5a65635ca58feb09a.png" width="700">
+<img alt="" height="170" src="images/H.264 入门篇 - 01 (Bitstream)/8ffc4662da489ab5a65635ca58feb09a.png" width="700">
 
 residual内部首先会根据entropy_coding_mode_flag来选择CAVLC或者CABAC的熵编码方式，然后在下面进行level的处理。level处理部分先包含了residual_luma，也就是先进行luma level的处理，然后用residual_block对chroma level进行处理。
 
@@ -910,7 +910,7 @@ chroma level一般采用的yuv格式都是4:2:0，也就是ChromaArrayType=1。
 
 ### 5.7、残差语法 - residual_luma
 
-<img alt="" height="810" src="https://i-blog.csdnimg.cn/blog_migrate/202b9e314a24bccc1c546b36842a9dee.png" width="704">
+<img alt="" height="810" src="images/H.264 入门篇 - 01 (Bitstream)/202b9e314a24bccc1c546b36842a9dee.png" width="704">
 <li>residual_luma 亮度残差变换量化后的语法结构，各参数说明如下 
   <ul>- i16x16DClevel 如果是intra16x16的宏块模式，会分开AC与DC单独编码，DC level会从residual_block内取出，并存在i16x16DClevel数组内- i16x16AClevel 如果是intra16x16的宏块模式，会分开AC与DC单独编码，AC level会从residual_block内取出，并存在i16x16AClevel数组内- level4x4 不是intra16x16的情况下，如果DCT变换采用的是4x4的方式，宏块的level会从residual_block内取出，并存在level4x4数组内- level8x8 不是intra16x16的情况下，如果DCT变换采用的是8x8的方式，宏块的level会从residual_block内取出，并存在level8x8数组内- startIdx 需要进行熵编码的数组起始位置的索引- endIdx 需要进行熵编码的数组结束位置的索引- residual_block 这并不是完整的熵编码，而是熵编码参数的语法结构，以后分析熵编码再进行分析
 luma level分为几种，如上面的数组i16x16DClevel, i16x16AClevel, level4x4, level8x8，在解码过程中，这些数组后续会被用于逆量化、逆变换，residual_luma的目的是从residual_block内取出level，并填充到这些数组当中。
@@ -922,11 +922,11 @@ luma level分为几种，如上面的数组i16x16DClevel, i16x16AClevel, level4x
       <ul>- 如果当前的宏块为Intra_16x16的预测方式，需要从residual_block中获取15个AC level，存储到i16x16AClevel中- 否则，则会从residual_block中获取16个level，存储到level4x4中- 否则（CBP相应位为0），如果当前的宏块为Intra_16x16的预测方式，它的AC level全为0，为i16x16AClevel中的15个元素赋值0- 否则（CBP相应位为0），意味着该4x4块内的level全为0，就为level4x4中的16个元素赋值0- 如果当前视频使用CAVLC进行熵编码（entropy_coding_mode_flag=0），但是当前宏块是以8x8块为单位进行DCT变换的（transform_size_8x8_flag=1），我们则需要把这些CAVLC解码得到的4x4块组合成8x8块，以便后续使用- 否则（要求当前视频使用CABAC进行熵编码（entropy_coding_mode_flag=1）并且当前宏块是以8x8为单位进行DCT变换（transform_size_8x8_flag=1），如果该8x8块内的level不全为0（CBP相应位为1），那么就从residual_block中获取64个level，并存储到level8x8中）- 否则（要求当前视频使用CABAC进行熵编码（entropy_coding_mode_flag=1）并且当前宏块是以8x8为单位进行DCT变换（transform_size_8x8_flag=1），如果该8x8块内的level全为0（CBP相应位为0），就为level8x8中的64个元素赋值0.
 如果没有宏块CBP上的bit全都不为0的话，它的residual就会是如下的样子
 
-<img alt="" height="458" src="https://i-blog.csdnimg.cn/blog_migrate/94c833d17dec636a3131650655e626bc.png" width="582">
+<img alt="" height="458" src="images/H.264 入门篇 - 01 (Bitstream)/94c833d17dec636a3131650655e626bc.png" width="582">
 
 ## 6、Slice、SPS、PPS 引用
 
-<img alt="" height="870" src="https://i-blog.csdnimg.cn/blog_migrate/a3d4e5a9e7cf9d66f3ccf201f4e54921.png" width="755">
+<img alt="" height="870" src="images/H.264 入门篇 - 01 (Bitstream)/a3d4e5a9e7cf9d66f3ccf201f4e54921.png" width="755">
 
 参考文献
 

@@ -37,7 +37,7 @@ DPB 全称 decoded picture buffer，即解码图片缓存区。
 
 在做视频解码时，需要将最近的若干幅参考帧缓存起来，这个缓冲区就叫做 DPB。解码已经完成的图像被缓存在 DPB 中，供后续帧用作参考图像，因此，解码器需要按照一定的规则对DPB中的图像进行管理。
 
-<img alt="" height="690" src="https://i-blog.csdnimg.cn/blog_migrate/e4bde598031d95e44ab6476e5e750bcc.png" width="903">
+<img alt="" height="690" src="images/H.264 入门篇 - 07 (帧间预测 - 解码图像缓存 DPB)/e4bde598031d95e44ab6476e5e750bcc.png" width="903">
 
 DPB中的每一个图像必须处于三种状态中的一种
 - Unused for reference：不作为参考帧；- Used for short-term reference：短期参考帧；- Used for long-term reference：长期参考帧；
@@ -57,7 +57,7 @@ DPB 一般以宏块数为单位，计算公式为：
 
 H.264协议规定，在不同的级别（Level）下，最大的解码图片缓存区宏块数（MaxDpbMbs）是不同的：
 
-<img alt="" height="793" src="https://i-blog.csdnimg.cn/blog_migrate/c68bc29dc78af9edb4ac9e10b6f514e3.png" width="1018">
+<img alt="" height="793" src="images/H.264 入门篇 - 07 (帧间预测 - 解码图像缓存 DPB)/c68bc29dc78af9edb4ac9e10b6f514e3.png" width="1018">
 
 
 
