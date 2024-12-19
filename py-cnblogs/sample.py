@@ -8,5 +8,5 @@ b2h.get_cnblogs('https://www.cnblogs.com/ityouknow/')
 
 h2m = html2markdown()
 # Conver Folder
-# 将文件夹下的html文件批量转换为markdown文件
-# h2m.convertFolder('/Users/shiqiang/Projects/py-cnblogs/cnblogs-coco1s/htmls', '/Users/shiqiang/Projects/py-cnblogs/cnblogs-coco1s/markdowns')
+# 将文件夹下的html文件批量转换为markdown文件/
+h2m.convertFolder('cnblogs-ityouknow/htmls', 'cnblogs-ityouknow/markdowns')

@@ -302,7 +302,15 @@ class html2markdown():
         md_string = ''
         if hexo_block:
             hexo_title = container.find('h1', class_='postTitle').get_text().strip()
-            hexo_date = re.search(r'<span id="post-date">(.*)</span>', html_string).group(1)
+            # print(html_string)
+            match = re.search(r'<span[^>]*id="post-date"[^>]*>(.*?)</span>', html_string)
+            # hexo_date = re.search(r'<span[^>]*id="post-date"[^>]*>(.*?)</span>', html_string).group(1)
+            if match:
+                hexo_date = match.group(1)  # 获取捕获内容
+                # print(f"匹配到的日期: {hexo_date}")
+            else:
+                hexo_date = '2024-1-1'
+                print("未匹配到日期")
             hexo_top = '''---
 title: {hexo_title}
 date: {hexo_date}
@@ -317,14 +325,19 @@ tag:
 
     # Convert File entrance 
     def convertFile(self, income_file_path, outcome_folder = '', hexo_block = True):
-        print(income_file_path)
+        # print('convertFile: in:  '+income_file_path)
+        # print('convertFile: out: '+outcome_folder)
+        # print(income_file_path)
         with open(income_file_path) as html_file:
             html_string = html_file.read()
 
         md_string = self.convert(html_string)
 
         if outcome_folder != '':
-            with open(outcome_folder + "/" + income_file_path.split('/')[-1].split('.')[0] + ".md", 'w') as f:
+            income_file_path = income_file_path.rstrip('.html').replace('（', '(').replace('）', ')')
+            title = income_file_path.split('/')[-1] + ".md"
+            print("save: "+title)
+            with open(outcome_folder + "/" + title, 'w') as f:
                 f.write(md_string)
                 f.close()
         else:
@@ -332,11 +345,14 @@ tag:
 
     # Conver htmls under a folder
     def convertFolder(self, income_folder, outcome_folder = ''):
+        print('convertFolder'+income_folder+':'+outcome_folder)
         if not os.path.exists(income_folder):
             print("Income folder : " + income_folder + " does not exists!")
             return False
-
-        for root, dirs, files in os.walk(income_folder):
-            for f in files:
-                self.convertFile(os.path.join(root,f), outcome_folder)
-        pass
+        for f in os.listdir(income_folder):
+            if os.path.isfile(os.path.join(income_folder, f)):
+                self.convertFile(os.path.join(income_folder, f), outcome_folder)
+        # for root, dirs, files in os.walk(income_folder):
+        #     for f in files:
+        #         self.convertFile(os.path.join(root,f), outcome_folder)
+        # pass

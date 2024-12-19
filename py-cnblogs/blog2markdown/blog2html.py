@@ -9,6 +9,7 @@ import re
 import requests
 import json
 from bs4 import BeautifulSoup
+import shutil
 
 class blog2html():
     html_path = ''
@@ -39,39 +40,75 @@ class blog2html():
         self.mkdir_cnblogs(url)
 
         # 获取最新一篇文章链接
-        lastest_blog_link = self.get_latest_link(soup)
+        # lastest_blog_link = self.get_latest_link(soup)
+        lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/category/1189649.html?page=2'
+        # lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/p/10312476.html'
+        
 
         # 递归获取链接内容，获取图片
         # 保存到指定目录和文件名格式
         # 文件名格式: yyyy-mm-dd-blog-name.html
-        self.get_all_posts(lastest_blog_link, url)
-            
+        # self.get_all_posts(lastest_blog_link, url)
+        self.fileTitle(lastest_blog_link)
+
+    def fileTitle(self, link):
+        print('find Title')
+        # 使用 BeautifulSoup 解析网页内容
+        html_content = self.get_html(link)
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        # 解析所有的链接和标题
+        entries = soup.find_all('a', class_='entrylistItemTitle')
+
+        for entry in entries:
+            link = entry['href']
+            title = entry.find('span', {'role': 'heading'}).get_text(strip=True)
+            print(f"Title: {title}, Link: {link}")
+            self.getWeb(link)
+
     # 遍历抓取cnblogs博客
-    def get_all_posts(self, blog_link, home_link):
-        print("GET " + blog_link)
+    def getWeb(self, blog_link):
+        # print("GET " + blog_link)
         html = self.get_html(blog_link)
         soup = BeautifulSoup(html, 'html.parser')
 
         # 规范文件名: yyyy-mm-dd-blog-name.html
-        post_date = soup.find('span', attrs={'id':'post-date'}).contents[0].split(" ")[0]
-        blog_file_name = post_date + "-" + blog_link.split("/")[-1]
+        # post_date = soup.find('span', attrs={'id':'post-date'}).contents[0].split(" ")[0]
+        # blog_file_name = post_date + "-" + blog_link.split("/")[-1]
+
+        # 获取标题
+        try:
+            hexo_title = soup.find('h1', class_='postTitle').get_text().strip()
+        except AttributeError:
+            hexo_title = "default-title"
+            print("no title")
+        try:
+            # 生成文件名：yyyy-mm-dd-blog-title.html
+            post_date = soup.find('span', attrs={'id':'post-date'}).contents[0].split(" ")[0]
+        except AttributeError:
+            post_date = "default-date"
+            print("no date")
+        blog_file_name = post_date + "-" + hexo_title.replace(" ", "-").lower() + ".html"
+        print("save to "+blog_file_name)
 
         # 解析文件中的图像并保存，并将图片地址替换为相对地址
         html_content = self.save_images(soup, blog_file_name)
 
         self.save_html_file(blog_file_name, str(html_content) )
-        print("DONE :" + blog_link)
+        # print("DONE :" + blog_link)
+
+        # self.fileTitle(soup)
 
         # 通过Ajax获取上一篇链接
-        blog_entry_id = re.search(r'cb_entryId\s=\s(\d+)',html).group().split("=")[1].strip()
-        ajax_link = home_link + "ajax/post/prevnext?postId=" + blog_entry_id
-        page_html = self.get_html(ajax_link)
-        page_soup = BeautifulSoup(page_html, 'html.parser')
-
-        if page_soup.a['href'] and len( page_soup.text.split("上一篇")) > 1:
-            self.get_all_posts(page_soup.a['href'], home_link)
-        else:
-            print("The last blog finished !")
+        # blog_entry_id = re.search(r'cb_entryId\s=\s(\d+)',html).group().split("=")[1].strip()
+        # ajax_link = home_link + "ajax/post/prevnext?postId=" + blog_entry_id
+        # page_html = self.get_html(ajax_link)
+        # page_soup = BeautifulSoup(page_html, 'html.parser')
+# 解析文章地址
+        # if page_soup.a['href'] and len( page_soup.text.split("上一篇")) > 1:
+        #     self.get_all_posts(page_soup.a['href'], home_link)
+        # else:
+        #     print("The last blog finished !")
 
 
     # 保存HTML文件
@@ -83,20 +120,24 @@ class blog2html():
     # 创建预定的目录结构
     def mkdir_cnblogs(self, url):
         blog_title = url.split('.com/')[1].split('/')[0]
+        print('mkdir:' + blog_title)
 
         self.html_path = "./cnblogs{}/htmls/".format('-'+blog_title)
         self.markdown_path  = "./cnblogs{}/markdowns/".format('-'+blog_title)
 
+        print('html_path:' + self.html_path)
+        print('markdown_path:' + self.markdown_path)
+
+        shutil.rmtree(self.html_path)
+        shutil.rmtree(self.markdown_path)
         isExists_html = os.path.exists(self.html_path)
         isExists_markdown = os.path.exists(self.markdown_path)
-        
-        if (not isExists_html) and (not isExists_markdown):
-            os.makedirs(self.html_path)
-            os.makedirs(self.markdown_path)
+        # if (not isExists_html) and (not isExists_markdown):
+        os.makedirs(self.html_path)
+        os.makedirs(self.markdown_path)
 
-            return True
-        else:
-            return False
+        return True
+
 
     # 从博客园首页获取第一篇文章内容
     def get_latest_link(self, bs4_soup):
@@ -130,32 +171,45 @@ class blog2html():
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Safari/605.1.15'
         }
 
-        if config['cookie']:
-            my_cookie = config['cookie']
+        # 初始化 cookies
+        my_cookie = config.get('cookie', None)
 
-        response = requests.get(url, headers = my_headers, cookies = my_cookie)
-
-        return response.text
+        try:
+            response = requests.get(url, headers=my_headers, cookies=my_cookie)
+            # 检查请求是否成功
+            response.raise_for_status()
+            return response.text
+        except requests.exceptions.RequestException as e:
+            # 打印错误并返回空字符串或其他默认值
+            print(f"请求失败: {e}")
+            return None
 
     # 创建一个同名文件夹，用于存放图片
     def save_images(self, bs4_html, blog_file_name):
-        html_path = self.html_path + blog_file_name.split('.')[0]
-        markdown_path  = self.markdown_path + blog_file_name.split('.')[0]
+        # html_path = self.html_path + blog_file_name.split('.')[0]
+        html_path = self.html_path + blog_file_name
+        html_path = html_path.rstrip('.html')
+        markdown_path  = self.markdown_path + blog_file_name
+        markdown_path = markdown_path.rstrip('.html')
 
         # 检查图片保存路径
         if (not os.path.exists(html_path) ) and (not os.path.exists(markdown_path)):
             os.makedirs(html_path)
             os.makedirs(markdown_path)
+        if (not os.path.exists(html_path)):
+            os.makedirs(html_path)
+        if (not os.path.exists(markdown_path)):
+            os.makedirs(markdown_path)
 
         config = self.read_config()
 
         my_cookie = ''
-        if config['cookie']:
-            my_cookie = config['cookie']
+        # if config['cookie']:
+            # my_cookie = config['cookie']
 
         my_headers = ''
-        if config['ua']:
-            my_headers = config['ua']
+        # if config['ua']:
+        #     my_headers = config['ua']
 
         img_links = bs4_html.find_all('img')
         for img in img_links:
@@ -166,15 +220,17 @@ class blog2html():
                     with open(markdown_path + "/" + img.get('src').split('/')[-1], 'wb') as f:
                         f.write(req.content)
                         f.close()
-
+                    # print('xxx'+html_path + "/" + img.get('src').split('/')[-1])
                     with open(html_path + "/" + img.get('src').split('/')[-1], 'wb') as f:
                         f.write(req.content)
                         f.close()
+                    # print('xxx')
 
                     # 替换图片
                     new_img = bs4_html.new_tag("img")
                     new_img['src'] = "" + blog_file_name.split('.')[0] + "/" + img.get('src').split('/')[-1]
                     img.replace_with(new_img)
+                    # print("Get Image OK: " + img.get('src'))
                 except:
                     print("Get Image Error: " + img.get('src'))
 
