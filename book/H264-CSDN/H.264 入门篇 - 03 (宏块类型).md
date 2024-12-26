@@ -35,7 +35,7 @@
 
 H.264 标准中，编解码如下所示
 
-<img alt="" height="733" src="https://i-blog.csdnimg.cn/blog_migrate/cfee7a2a14850b62c9bdd763702ee18b.png" width="1200">
+<img alt="" height="733" src="images/H.264 入门篇 - 03 (宏块类型)/cfee7a2a14850b62c9bdd763702ee18b.png" width="1200">
 
 在 Slice -&gt; RBSP -&gt; MacroBlock Layer 中，包含了一个 mb_type 这个字段：
 <td colspan="2" rowspan="1"> slice_type 允许的宏块类型集合 </td>
@@ -64,15 +64,15 @@ P (参见表 7-13) 和 I (参见表 7-11) (宏块类型)
 - I 宏块支持 16x16、4个8x8块、16个4x4块划分方式；- P 宏块支持 16x16、2个16x8块、2个8x16块、4个8x8块（8x8块还需要再次划分）- B 宏块支持 16x16、2个16x8块、2个8x16块、4个8x8块（8x8块还需要再次划分）
 ## 2、宏块数据语法
 
-<img alt="" height="910" src="https://i-blog.csdnimg.cn/blog_migrate/83cad5d4f66217b8da9fb472fba57832.png" width="705">
+<img alt="" height="910" src="images/H.264 入门篇 - 03 (宏块类型)/83cad5d4f66217b8da9fb472fba57832.png" width="705">
 
-<img alt="" height="105" src="https://i-blog.csdnimg.cn/blog_migrate/5fbcabbc299a5e561a648a6d6176ff5d.png" width="703">
+<img alt="" height="105" src="images/H.264 入门篇 - 03 (宏块类型)/5fbcabbc299a5e561a648a6d6176ff5d.png" width="703">
 
 ## 3、宏块类型 mb_type
 
 mb_type 的查找法如下所示：
 
-<img alt="" height="813" src="https://i-blog.csdnimg.cn/blog_migrate/4b92c2715534fb25576c780d512521dd.png" width="1200">
+<img alt="" height="813" src="images/H.264 入门篇 - 03 (宏块类型)/4b92c2715534fb25576c780d512521dd.png" width="1200">
 
 不同的 Slice type 下，同样的 mb_type 值，代表了不同的含义；
 
@@ -314,7 +314,7 @@ Intra_16x16_Plane
 
 如果当前宏块类型采用的预测方式为 Intra_16x16，那么该字段有效，它用0~2表示了 Chroma 宏块中的 CBP，请参考中的 coded_block_pattern
 
-<img alt="" height="197" src="https://i-blog.csdnimg.cn/blog_migrate/f66f062ce72e469eaab9e576076ffd1a.png" width="787">
+<img alt="" height="197" src="images/H.264 入门篇 - 03 (宏块类型)/f66f062ce72e469eaab9e576076ffd1a.png" width="787">
 
 **CBP** 用来反映该宏块编码中残差情况的语法元素；
 
@@ -360,7 +360,7 @@ Intra_4x4_Vertical_Left
 
 Intra_4x4_Horizontal_Up
 
-<img alt="" height="905" src="https://i-blog.csdnimg.cn/blog_migrate/5e1e289a70fa288eae6c5178ac5c43f8.png" width="1200">
+<img alt="" height="905" src="images/H.264 入门篇 - 03 (宏块类型)/5e1e289a70fa288eae6c5178ac5c43f8.png" width="1200">
 
 ### 3.2、P Slice 的 mb_type
 

@@ -41,7 +41,7 @@ H.264 支持多参考帧，对于 P 帧最少参考 1 帧，B 帧最少参考 2 
 
 在 H.264 编解码的过程中，一帧图像编码完毕后，经过解码后，会经过 DPB 缓存起来，但是是否作为帧间参考的参考帧，还不一定，这里就会维护一个 DPB 中的一个参考帧列表；
 
-<img alt="" height="710" src="https://i-blog.csdnimg.cn/blog_migrate/3ea6b20a16d3ca9e0a2714a564e9c546.png" width="982">
+<img alt="" height="710" src="images/H.264 入门篇 - 09 (帧间预测 - 参考帧列表)/3ea6b20a16d3ca9e0a2714a564e9c546.png" width="982">
 - 某一帧图像在解码完成后，可能会被保存于参考帧列表中；- 参考帧列表中的图像作为帧间编码的参考数据；<li>对 P 帧和 B 帧，参考帧列表有所不同； 
   <ul>- P 帧对应一个参考帧列表；- B 帧对应两个参考帧列表；- 参考帧列表中的数据在某条件下可进行修改；
 ## 1、frame_num 和 POC
@@ -60,7 +60,7 @@ H.264 支持多参考帧，对于 P 帧最少参考 1 帧，B 帧最少参考 2 
 
 每一个参考帧将按照相应的规则标记为短期或长期参考帧
 
-<img alt="" height="322" src="https://i-blog.csdnimg.cn/blog_migrate/875c180aa6a62bde29f98c2c39efdd0a.png" width="1125">
+<img alt="" height="322" src="images/H.264 入门篇 - 09 (帧间预测 - 参考帧列表)/875c180aa6a62bde29f98c2c39efdd0a.png" width="1125">
 
 短期和长期的关系和区别：在一个解码器中的 DPB（参考帧缓存）大小总是有限的，所以引入一个问题，什么样的参考帧会被保存到 DPB 中，什么样的参考帧会被移除出去，因此将分为长期和短期参考帧，所谓短期参考帧是这帧不会长期驻留在DPB中，如果参考帧缓存已满或者有其他特定的条件，那么短期参考帧就会被从DPB中移除；与之相对的长期参考帧，只要没有遇到某个指定的条件，遇到某个IDR帧， 遇到了清空整个DPB的指令等等，那么长期参考帧会长期在DPB中，不会因为有新的参考帧而被冲刷掉；
 
@@ -109,7 +109,7 @@ H.264 支持多参考帧，对于 P 帧最少参考 1 帧，B 帧最少参考 2 
 - 在P帧的参考帧列表 RefPicList0 中，短期参考帧排列在长期参考帧的前面，即短期参考帧的索引值均小于长期参考帧的索引。- 排列短期参考帧：按照PicNum的顺序降序排列，即从PicNum最高的帧开始，一直到PicNum最低的帧为止。- 排列长期参考帧：短期参考帧相反，是按照LongTermPicNum升序排列，即从LongTermPicNum最低的帧开始，一直到LongTermPicNum最高的帧为止。
 举例如下，假设DPB最大容量为8，其中包含了5个短期参考帧和3个长期参考帧，那么P帧解码时的参考帧列表可用下图表示：
 
-<img alt="" height="526" src="https://i-blog.csdnimg.cn/blog_migrate/9a9f6bce733787798f9ad5a27babcd85.png" width="1200">
+<img alt="" height="526" src="images/H.264 入门篇 - 09 (帧间预测 - 参考帧列表)/9a9f6bce733787798f9ad5a27babcd85.png" width="1200">
 
 ### 3.2、B 帧排序
 
@@ -120,6 +120,6 @@ H.264 支持多参考帧，对于 P 帧最少参考 1 帧，B 帧最少参考 2 
 在排列短期参考帧时，会将当前帧的POC与DPB中参考帧的POC进行比较，然后根据结果进行以下操作：
 <li>对参考帧列表 refPicList0： 
   <ul>- 如果DPB中短期参考帧的POC小于当前帧的POC，则短期参考帧按照POC的降序排列在参考帧列表refPicList0的前部，其余短期参考帧按照POC的升序紧随其后排列；- DPB中的长期参考帧按照LongTermPicNum递增的顺序在短期参考帧之后排列；- 如果DPB中短期参考帧的POC大于当前帧的POC，则短期参考帧按照POC的升序排列在参考帧列表refPicList1的前部，其余短期参考帧按照POC的降序紧随其后排列；- DPB中的长期参考帧按照LongTermPicNum递增的顺序在短期参考帧之后排列；- 若refPicList1包含多于1个参考帧，且refPicList1与refPicList0等同时，refPicList1中前两个参考帧refPicList1[0]和refPicList1[1]将进行交换。
-<img alt="" height="790" src="https://i-blog.csdnimg.cn/blog_migrate/f914f1ba9c177d9a43a75e72cf490966.png" width="1200">
+<img alt="" height="790" src="images/H.264 入门篇 - 09 (帧间预测 - 参考帧列表)/f914f1ba9c177d9a43a75e72cf490966.png" width="1200">
 
 

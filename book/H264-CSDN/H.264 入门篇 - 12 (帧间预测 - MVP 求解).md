@@ -43,7 +43,7 @@ mv 预测值的推导过程可分为亮度分量mvp和色度分量mvp
 
 mvp 由当前块（任意分块大小）左边分块A、上边分块B、右上分块 C 的 mv 预测得到。亮度分量 mv预测值推导过程分为两步：
 - 获取当前分块（任意分块大小）相邻块是否可用和 mv 等信息；- 根据相邻块信息通过中值预测得到当前块 mv；
-<img alt="" height="427" src="https://i-blog.csdnimg.cn/blog_migrate/45b2b2d2bfcf68d0de71550027d2e5bd.png" width="604">
+<img alt="" height="427" src="images/H.264 入门篇 - 12 (帧间预测 - MVP 求解)/45b2b2d2bfcf68d0de71550027d2e5bd.png" width="604">
 
 如果 mbAddr C 不可用，那么用 mbAddr D 来替代 mbAddr C；
 
@@ -51,7 +51,7 @@ mvp 由当前块（任意分块大小）左边分块A、上边分块B、右上�
 
 中值预测规则如下：
 - 当前块为16x8大小，上面的16x8块由B预测，下面的16x8块由A预测；- 当前块为8x16大小，左边的8x16块由A预测，右边的8x16块由C预测；- 如果有且仅有一个相邻块的参考索引等于当前分块的参考索引，则mvp等于该块mv；- 其余情况，取A、B、C块 mv 的中值，即 mvp = mid(mvA, mvB, mvC)。
-<img alt="" height="528" src="https://i-blog.csdnimg.cn/blog_migrate/f07dae4a0084bebfc742b1a8f7e4f10e.png" width="619">
+<img alt="" height="528" src="images/H.264 入门篇 - 12 (帧间预测 - MVP 求解)/f07dae4a0084bebfc742b1a8f7e4f10e.png" width="619">
 
 在进行上面的 mvp 计算时，还要满足下面的限制条件：
 1. 只有当当前块E的参考帧和临近块（A、B、C）的参考帧为同一帧，那么才可以使用MVA、MVB、和MVC进行预测；1. 如果MVC不可用，则用当前块的左上边块的运动矢量MVD代替MVC；1. 如果MVA、MVB和MVC中没有可用的，那么不进行运动矢量预测，直接编码当前块的运动矢量MV；1. 如果MVA、MVB和MVC中只有一个可用的，那么MVP就是该可用的临近块运动矢量；1. 如果MVA、MVB和MVC中有两个可用的，那么将另一个不可用的当作0，然后按照3个都可用的策略计算MVP。
@@ -61,7 +61,7 @@ mvp 由当前块（任意分块大小）左边分块A、上边分块B、右上�
 
 场宏块色度mv的垂直分量按下表计算。
 
-<img alt="" height="178" src="https://i-blog.csdnimg.cn/blog_migrate/37c8ad70e7577e7ebdfec13a3bd6c2cf.jpeg" width="744">
+<img alt="" height="178" src="images/H.264 入门篇 - 12 (帧间预测 - MVP 求解)/37c8ad70e7577e7ebdfec13a3bd6c2cf.jpeg" width="744">
 
 
 

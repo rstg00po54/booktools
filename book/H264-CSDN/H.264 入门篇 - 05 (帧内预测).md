@@ -69,7 +69,7 @@
 
 本过程的输入是去块效应滤波过程之前的重建样点值，以及对于 Intra_N×N 预测模式（其中 N×N 等于 4×4 或 8×8）下相邻宏块的 IntraNxNPredMode 值。
 
-<img alt="" height="677" src="https://i-blog.csdnimg.cn/blog_migrate/453db13f1fd40a2ad4b0ffbecebbe838.png" width="1200">
+<img alt="" height="677" src="images/H.264 入门篇 - 05 (帧内预测)/453db13f1fd40a2ad4b0ffbecebbe838.png" width="1200">
 
 ## 1、帧内预测类型
 
@@ -87,7 +87,7 @@
 
 该模式下，16x16宏块中的亮度块，可分为16个4x4块，每个4x4块都使用Intra_4x4预测方式。其中16个4x4块的扫描顺序如下图：
 
-<img alt="" height="239" src="https://i-blog.csdnimg.cn/blog_migrate/afa0d240a67d87e752768e43a74c73e0.png" width="474">
+<img alt="" height="239" src="images/H.264 入门篇 - 05 (帧内预测)/afa0d240a67d87e752768e43a74c73e0.png" width="474">
 
 对于索引号 luma4x4BlkIdx 为 0-15 的 4x4 块，获得当前块的预测像素的过程如下：
 
@@ -105,11 +105,11 @@
 
 下表定义了 Intra4x4PredMode[ luma4x4BlkIdx ]的值和相应的名称。
 
-<img alt="" height="470" src="https://i-blog.csdnimg.cn/blog_migrate/67c639b395763cf7eaaa38c67ded0d97.png" width="1184">
+<img alt="" height="470" src="images/H.264 入门篇 - 05 (帧内预测)/67c639b395763cf7eaaa38c67ded0d97.png" width="1184">
 
 Intra4x4PredMode[ luma4x4BlkIdx ]的值为 0、1、2、3、4、5、6、7 和 8，这些值分别代表不同预测方向，如下图：
 
-<img alt="" height="384" src="https://i-blog.csdnimg.cn/blog_migrate/8fa2764c1a4c069c5448452998bb6301.png" width="403">
+<img alt="" height="384" src="images/H.264 入门篇 - 05 (帧内预测)/8fa2764c1a4c069c5448452998bb6301.png" width="403">
 
 Intra4x4PredMode[ luma4x4BlkIdx ] 由以下方式得到：
 
@@ -142,15 +142,15 @@ else
 
 1、左与上的相邻块都在当前宏块，即此时当前宏块还未决定是采用 I_8x8 还是 I_4x4 或者其他的预测方式。那么当前块的相邻块A,B的预测模式就采用与这轮的宏块模式相同的方式的预测模式。如，当前正以I_8x8进行帧内预测，那 PredModeA = PredMode8x8A，PredModeB = PredMode8x8_B.
 
-<img alt="" height="542" src="https://i-blog.csdnimg.cn/blog_migrate/9d50e630432be60a7e19b4962b96d51c.png" width="866">
+<img alt="" height="542" src="images/H.264 入门篇 - 05 (帧内预测)/9d50e630432be60a7e19b4962b96d51c.png" width="866">
 
 2、左与上的宏块都位于相邻宏块，即当前块位于宏块的左上角。此时左与上块所在的宏块都已选定了所采用的帧内宏块预测方式，因此无论当前块是在哪轮的帧内预测上（I_4x4或I_8x8），都应采用相邻宏块的预测方式来作为当前块的相邻块的帧内预测模式，PredModeA = PredModeMacroBlockA，PredModeB = PredModeMacroBlockB.
 
-<img alt="" height="719" src="https://i-blog.csdnimg.cn/blog_migrate/cfb9f308269b4fa12723f43166ca0edf.png" width="886">
+<img alt="" height="719" src="images/H.264 入门篇 - 05 (帧内预测)/cfb9f308269b4fa12723f43166ca0edf.png" width="886">
 
 3、左或上的其中一个块为相邻宏块，仅有一个（左或上）块位于当前宏块。这种情况下，位于其他宏块的相邻块采用其所在宏块的帧内预测模式，位于当前宏块的相邻块采用这一轮预测模式。PredModeA = PredMode4x4A，PredModeB = PredModeMacroblockB.
 
-<img alt="" height="712" src="https://i-blog.csdnimg.cn/blog_migrate/4b548879a95fde24392822ccb06ea7e6.png" width="940">
+<img alt="" height="712" src="images/H.264 入门篇 - 05 (帧内预测)/4b548879a95fde24392822ccb06ea7e6.png" width="940">
 
 最终：
 
@@ -160,13 +160,13 @@ else
 
 Intra_4x4 预测需要用到的13个相邻像素值如下图所示：
 
-<img alt="" height="160" src="https://i-blog.csdnimg.cn/blog_migrate/866750ef553e94107dfe8c8960f32621.png" width="298">
+<img alt="" height="160" src="images/H.264 入门篇 - 05 (帧内预测)/866750ef553e94107dfe8c8960f32621.png" width="298">
 
 相邻像素如何获取可参考.
 
 首先需要判断这13个像素值是否有效。当下列4个条件满足任意一个，那么该像素便被判定为无效，不能用于预测：
 - 宏块mbAddrN不可获得；- 宏块mbAddrN为帧间预测模式，且标识位constrained_intra_pred_flag为1；- 宏块mbAddrN为SI类型，，且标识位constrained_intra_pred_flag为1，且当前宏块不是SI类型；- 块索引luma4x4BlkIdx为3或11时，EFGH4个像素值不可用；（如下图所示，当解码到第3个块时，4还未解码，所以块4中的预测像素值不能使用，也就是EFGH这4个像素值）。
-<img alt="" height="253" src="https://i-blog.csdnimg.cn/blog_migrate/ebb88ba787d5c5b47fb5922b37340abf.png" width="251">
+<img alt="" height="253" src="images/H.264 入门篇 - 05 (帧内预测)/ebb88ba787d5c5b47fb5922b37340abf.png" width="251">
 
 ### 2.3、Intra4x4 预测
 
@@ -174,15 +174,15 @@ Intra4x4 预测根据相邻的13个像素值得到当前4x4块预测像素值。
 
 #### 2.3.1、Intra4x4_Vertical 预测模式
 
-<img alt="" height="220" src="https://i-blog.csdnimg.cn/blog_migrate/c7d11007a868f7b9bed33454c640abdd.png" width="389">
+<img alt="" height="220" src="images/H.264 入门篇 - 05 (帧内预测)/c7d11007a868f7b9bed33454c640abdd.png" width="389">
 
 #### 2.3.2、Intra4x4_Horizontal 预测模式
 
-<img alt="" height="312" src="https://i-blog.csdnimg.cn/blog_migrate/522c58d5cdcf167462fc670b648fef0b.png" width="553">
+<img alt="" height="312" src="images/H.264 入门篇 - 05 (帧内预测)/522c58d5cdcf167462fc670b648fef0b.png" width="553">
 
 #### 2.3.3、Intra4x4_DC 预测模式
 
-<img alt="" height="267" src="https://i-blog.csdnimg.cn/blog_migrate/b9b076b79043e6efb22b27429a5174fe.png" width="467">
+<img alt="" height="267" src="images/H.264 入门篇 - 05 (帧内预测)/b9b076b79043e6efb22b27429a5174fe.png" width="467">
 
 Dc数值为相邻像素值的均值：
 1. A、B、C、D、I、J、K、L都存在时，dc为这8个像素值的均值；1. A、B、C、D不可用时，dc为I、J、K、L这4个像素的均值；1. I、J、K、L不可用时，dc为A、B、C、D这4个像素的均值；1. 当这8个像素都不可用时，dc为(1&lt;&lt;(bit_depth-1))
@@ -192,11 +192,11 @@ Dc数值为相邻像素值的均值：
 - 当(x,y)=(3,3)，即计算一个4×4像素块最右下方的像素p时：- pred4x4L[ x, y ] = ( p[ 6, −1 ] + 3 * p[ 7, −1 ] + 2 ) &gt;&gt; 2- 其他情况计算方式如下：- pred4x4L[ x, y ] = ( p[ x + y, −1 ] + 2 * p[ x + y + 1, −1 ] + p[ x + y + 2, −1 ] + 2 ) &gt;&gt; 2；
 以像素点a为例，做一条左下方向成45°直线，会穿过预测像素点B，预测计算过程依赖A、B、C三个像素值，pred_a = (A+2B+C+2)/4
 
-<img alt="" height="260" src="https://i-blog.csdnimg.cn/blog_migrate/a8888d3aec8d28657cbedf6b8066c947.png" width="465">
+<img alt="" height="260" src="images/H.264 入门篇 - 05 (帧内预测)/a8888d3aec8d28657cbedf6b8066c947.png" width="465">
 
 #### 2.3.5、Intra4x4_Diagonal_Down_right 预测模式
 
-<img alt="" height="268" src="https://i-blog.csdnimg.cn/blog_migrate/62d58e4d1d9937e572d62fba64a3d923.png" width="468">
+<img alt="" height="268" src="images/H.264 入门篇 - 05 (帧内预测)/62d58e4d1d9937e572d62fba64a3d923.png" width="468">
 
 #### 2.3.6、Intra_4x4_Vertical_Right 预测模式
 
@@ -206,25 +206,25 @@ Dc数值为相邻像素值的均值：
 
 像素f、o的预测值为（Q+2A+B+2）/4
 
-<img alt="" height="294" src="https://i-blog.csdnimg.cn/blog_migrate/c4178868747559d69f1d99d5b5b63e3b.png" width="527">
+<img alt="" height="294" src="images/H.264 入门篇 - 05 (帧内预测)/c4178868747559d69f1d99d5b5b63e3b.png" width="527">
 
 #### 2.3.7、Intra_4x4_Horizontal_Down 预测模式
 
-<img alt="" height="259" src="https://i-blog.csdnimg.cn/blog_migrate/e1ee1d3f738bad70d970f9fab2d50d35.png" width="462">
+<img alt="" height="259" src="images/H.264 入门篇 - 05 (帧内预测)/e1ee1d3f738bad70d970f9fab2d50d35.png" width="462">
 
 #### 2.3.8、Intra_4x4_Vertical_Left 预测模式
 
-<img alt="" height="273" src="https://i-blog.csdnimg.cn/blog_migrate/11d86ddf41229c9cddb88ab468bcf84e.png" width="474">
+<img alt="" height="273" src="images/H.264 入门篇 - 05 (帧内预测)/11d86ddf41229c9cddb88ab468bcf84e.png" width="474">
 
 #### 2.3.9、Intra_4x4_Horizontal_Up 预测模式
 
-<img alt="" height="262" src="https://i-blog.csdnimg.cn/blog_migrate/28d66a35914742e8e0ed88cdddad2cab.png" width="463">
+<img alt="" height="262" src="images/H.264 入门篇 - 05 (帧内预测)/28d66a35914742e8e0ed88cdddad2cab.png" width="463">
 
 ## 3、亮度 Intra_8x8 预测
 
 一个宏块种的16x16亮度分量可分为4个8x8亮度块，每个8x8块都是用Intra_8x8预测方式。其中4个8x8块的扫描顺序如下：
 
-<img alt="" height="189" src="https://i-blog.csdnimg.cn/blog_migrate/ad2626412cfbb5c6799f4e7d3944c2af.png" width="193">
+<img alt="" height="189" src="images/H.264 入门篇 - 05 (帧内预测)/ad2626412cfbb5c6799f4e7d3944c2af.png" width="193">
 
 对于索引号luma8x8BlkIdx为0-3的8x8块，预测方式推导过程、预测像素计算过程与Intra4x4类似，在此不再赘述。获取8x8块预测像素值流程如下：
 
@@ -246,7 +246,7 @@ Intra_16x16需要33个参考像素点，分别为当前宏块左侧16个像素�
 
 4种预测模式如下：
 
-<img alt="" height="280" src="https://i-blog.csdnimg.cn/blog_migrate/72f9e026b5637d941f6452e8407b6295.png" width="798">
+<img alt="" height="280" src="images/H.264 入门篇 - 05 (帧内预测)/72f9e026b5637d941f6452e8407b6295.png" width="798">
 
 ### 4.1、Intra_16x16_Vertical 预测模式
 
