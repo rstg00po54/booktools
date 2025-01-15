@@ -21,13 +21,13 @@ tag:
 预测模式的选取分为三种情况：
 
   1. 左与上的相邻块都在当前宏块，即此时当前宏块还未决定是采用I_8x8还是I_4x4或者其他的预测方式。那么当前块的相邻块A,B的预测模式就采用与这轮的宏块模式相同的方式的预测模式。如，当前正以I_8x8进行帧内预测，那PredModeA = PredMode8x8A，PredModeB = PredMode8x8_B.
-![](//images0.cnblogs.com/blog/421096/201412/282304539976993.jpg)
+![](2014-12-28-intra-luma-prediction/282304539976993.jpg)
 
   2. 左与上的宏块都位于相邻宏块，即当前块位于宏块的左上角。此时左与上块所在的宏块都已选定了所采用的帧内宏块预测方式，因此无论当前块是在哪轮的帧内预测上（I_4x4或I_8x8），都应采用相邻宏块的预测方式来作为当前块的相邻块的帧内预测模式，PredModeA = PredModeMacroBlockA，PredModeB = PredModeMacroBlockB.
-![](//images0.cnblogs.com/blog/421096/201412/282304546385864.jpg)
+![](2014-12-28-intra-luma-prediction/282304546385864.jpg)
 
   3. 左或上的其中一个块为相邻宏块，仅有一个（左或上）块位于当前宏块。这种情况下，位于其他宏块的相邻块采用其所在宏块的帧内预测模式，位于当前宏块的相邻块采用这一轮预测模式。PredModeA = PredMode4x4A，PredModeB = PredModeMacroblockB.
-![](//images0.cnblogs.com/blog/421096/201412/282304551224549.jpg)
+![](2014-12-28-intra-luma-prediction/282304551224549.jpg)
 
 
 
@@ -47,7 +47,7 @@ PredPredMode = Min(PredModeA, PredModeB)
   2. 如果PredMode > PredPredMode，remPredMode = PredMode -1
 
 remPredMode为最后用来编码的mode
-![](//images0.cnblogs.com/blog/421096/201412/282304556389692.jpg)
+![](2014-12-28-intra-luma-prediction/282304556389692.jpg)
 
 
 
@@ -59,11 +59,11 @@ remPredMode为最后用来编码的mode
 
 可见4x4与8x8的预测模式都是以一样的顺序排列。
 除了序号为2的DC模式外，其他模式都是通过相邻块的边缘像素点来进行线性预测的，预测方向如下
-![](//images0.cnblogs.com/blog/421096/201412/282304560138877.jpg)
+![](2014-12-28-intra-luma-prediction/282304560138877.jpg)
 在图像上，像素点坐标是按照左上至右下的顺序递增的。按照这种规律，可以得到一个坐标轴如下
-![](//images0.cnblogs.com/blog/421096/201412/282304563258848.jpg)
+![](2014-12-28-intra-luma-prediction/282304563258848.jpg)
 这样的话，预测模式就可以看做是斜率，只要知道坐标轴上的点（相邻块边界像素值），即可通过斜率（预测模式），得到该斜线上的坐标。
-![](//images0.cnblogs.com/blog/421096/201412/282304566696277.jpg)
+![](2014-12-28-intra-luma-prediction/282304566696277.jpg)
 就以上图的这种情况为例，可以看到当mode=4时，斜率为1，即
 $y=x+b$
 $-b=x-y$
@@ -81,16 +81,16 @@ $p[-b,0]=p[x-\frac{y}{2},0]=p[x,y]$
 
 # Intra4x4
 对于一个4x4块来说，在进行帧内预测时会用到相邻像素点有13个，如上方图片中红色方块所示。但是在相邻宏块不可用于intra预测的时候，该相邻宏块上的像素点是不可用的，也就是说会存在相邻像素点不可用的情况。但是存在一个特殊情况：如果不可用的是（4~7，-1），而（3，-1）是可用的，那会令（4~7，-1）的值等于（3，-1）的像素点的值去进行预测。
-![](//images0.cnblogs.com/blog/421096/201412/282304570608691.jpg)
+![](2014-12-28-intra-luma-prediction/282304570608691.jpg)
 
 
 1. Intra 4x4 Vertical Prediction Mode
-![](//images0.cnblogs.com/blog/421096/201412/282304573416905.jpg)
+![](2014-12-28-intra-luma-prediction/282304573416905.jpg)
 $Pred{4}\times{4}_{L}[x,y] = p[x,-1]$
 
 
 2. Intra 4x4 Horizontal Prediction mode
-![](//images0.cnblogs.com/blog/421096/201412/282304578884805.jpg)
+![](2014-12-28-intra-luma-prediction/282304578884805.jpg)
 $Pred{4}\times{4}_{L}[x,y] = p[-1,y]$
 
 
@@ -107,7 +107,7 @@ $Pred{4}\times{4}_{L}[x,y] = p[-1,y]$
 
 
 4. Intra 4x4 Diagonal Down Left Prediction Mode
-![](//images0.cnblogs.com/blog/421096/201412/282304582004775.jpg)
+![](2014-12-28-intra-luma-prediction/282304582004775.jpg)
 
   * If $x = y = 3$$Pred{4}\times{4}_{L}[x,y] = (p[6,-1] + 3\times{p[7,-1]} + 2) >> 2$
 
@@ -117,7 +117,7 @@ $Pred{4}\times{4}_{L}[x,y] = p[-1,y]$
 
 
 5. Intra 4x4 Diagonal Down Right Prediction Mode
-![](//images0.cnblogs.com/blog/421096/201412/282304586858161.jpg)
+![](2014-12-28-intra-luma-prediction/282304586858161.jpg)
 
   * If $x > y$$Pred{4}\times{4}_{L}[x,y] = (p[x-y-2,-1] + 2\times{p[x-y-1,-1]} + p[x-y, -1] + 2) >> 2$
 
@@ -127,7 +127,7 @@ $Pred{4}\times{4}_{L}[x,y] = p[-1,y]$
 
 
 
-6. Intra 4x4 Vertical Right Prediction Mode![](//images0.cnblogs.com/blog/421096/201412/282304590444118.jpg)
+6. Intra 4x4 Vertical Right Prediction Mode![](2014-12-28-intra-luma-prediction/282304590444118.jpg)
 $zVR = 2\times{x}+y$
 
   * If $zVR = 0,2,4,6$$Pred{4}\times{4}_{L}[x,y] = (p[x-\frac{y}{2}-1,-1] + p[x-\frac{y}{2}, -1] + 1) >> 1$
@@ -141,7 +141,7 @@ $zVR = 2\times{x}+y$
 
 
 7. Intra 4x4 Horizontal Down Prediction
-![](//images0.cnblogs.com/blog/421096/201412/282304596535531.jpg)
+![](2014-12-28-intra-luma-prediction/282304596535531.jpg)
 $zHD = 2\times{y}-x$
 
   * If $zHD = 0,2,4,6$$Pred{4}\times{4}_{L}[x,y] = (p[-1,y-\frac{x}{2}-1] + p[-1,y-\frac{x}{2}] + 1) >> 1$
@@ -155,7 +155,7 @@ $zHD = 2\times{y}-x$
 
 
 8. Intra 4x4 Vertical Left Prediction Mode
-![](//images0.cnblogs.com/blog/421096/201412/282304599818730.jpg)
+![](2014-12-28-intra-luma-prediction/282304599818730.jpg)
 
   * If $y = 0,2$$Pred{4}\times{4}_{L}[x,y] = (p[x+\frac{y}{2},-1] + p[x+\frac{y}{2}+1,-1] + 1) >> 1$
 
@@ -164,7 +164,7 @@ $zHD = 2\times{y}-x$
 
 
 9. Intra 4x4 Horizontal Up Predition
-![](//images0.cnblogs.com/blog/421096/201412/282305003256159.jpg)
+![](2014-12-28-intra-luma-prediction/282305003256159.jpg)
 $zHU = x + 2\times{y}$
 
   * If $zHU = 0,2,4$$Pred{4}\times{4}_{L}[x,y] = (p[-1,y+\frac{x}{2}] + p[-1,y+\frac{x}{2}+1] + 1) >> 1$
@@ -183,7 +183,7 @@ $zHU = x + 2\times{y}$
 # Intra8x8
 8x8块的帧内预测跟4x4的基本上是一样的，可以看做放大了的4x4块。例如上面提到的相邻宏块不可用的情况，8x8块在预测时也会用(7,-1)去补全(8~15,-1)。而预测的方向也是与上面4x4预测的9个完全一样。
 但是有一个不同的地方，就是8x8块在预测之前会去做一次边界像素点的滤波，滤波后所得的新像素点会被用于当前8x8块的预测，不同于4x4会直接去用边界像素点了进行预测。
-![](//images0.cnblogs.com/blog/421096/201412/282305007471331.jpg)
+![](2014-12-28-intra-luma-prediction/282305007471331.jpg)
 
 
 
