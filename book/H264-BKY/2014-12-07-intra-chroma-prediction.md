@@ -59,18 +59,18 @@ DC模式分为三种情况
 * 否则$Pred_{4\times4}(x,y)=Sum_{default}$
 
 
-![](//images0.cnblogs.com/blog/421096/201412/072148194206529.jpg)
+![](2014-12-07-intra-chroma-prediction/072148194206529.jpg)
 
 
 #### 2  .  Intra Chroma Horizon
 只有当左相邻宏块的像素点Pixel(-1,y)被标记为可以用于帧内预测时才能采用这种预测方式
 $Pred(x,y)=Pixel(-1,y)$
-![](//images0.cnblogs.com/blog/421096/201412/072148200615401.jpg)
+![](2014-12-07-intra-chroma-prediction/072148200615401.jpg)
 
 #### 3 .    Intra Chroma Vertical
 只有当上方相邻宏块的像素点Pixel(x,-1)被标记为可以用于帧内预测时才能采用这种预测方式
 $Pred(x,y)=Pixel(x,-1)$
-![](//images0.cnblogs.com/blog/421096/201412/072148207959542.jpg)
+![](2014-12-07-intra-chroma-prediction/072148207959542.jpg)
 
 #### 4  . Intra Chroma Plane
 只有当左相邻宏块像素点Pixel(-1,y)以及上方相邻宏块像素点Pixel(x,-1)都被标记为可以用于Intra预测时才能采用这种预测方式
@@ -85,7 +85,7 @@ H&=\sum_{x=0}^{3}(x+1)\times{(Pixel(4+x,-1)-Pixel(2-x,-1))}\\
 V&=\sum_{y=0}^{3}(y+1)\times{(Pixel(-1,4+y)-Pixel(-1,2-y))}
 \end{align*}$
 我们在这里令$M= Pixel(4+x,-1)-Pixel(2-x,-1)$，令x为x轴，M为y轴，H为z轴，得到以下图像
-![](//images0.cnblogs.com/blog/421096/201412/082310523683560.jpg)
+![](2014-12-07-intra-chroma-prediction/082310523683560.jpg)
 可以看出在x越大的情况下（趋向于宏块两端），如果M（两端像素差）越大，那么得到的值也就越大，因此该参数H表明了Pixel(x,-1)的变化趋势，是变大呢（H值很大），变小呢（H值为负，很小），还是平缓（H值在0附近）。
 同理，V在y轴上也是这种情况。
 按照上面的说法，这就是一个线性系数，那么我们就可以把H与V做一下调整，归一化得到线性系数b与c
@@ -94,7 +94,7 @@ b &= (34+29\times{H})>>6 \\
 c &= (34+29\times{V})>>6
 \end{align*}$
 得到系数后，再确定常量（基准值）就可以得到一个完整的式子了。那么如何确定基准值？这里假设像素是按照左下->右上的方式变化的，即像素值在该方向上线性变化。
-![](//images0.cnblogs.com/blog/421096/201412/072148216398884.jpg)
+![](2014-12-07-intra-chroma-prediction/072148216398884.jpg)
 那么取中心点为基准值，该基准值为左相邻宏块的最低端与上相邻宏块最右端的平均值
 $Pred(3,3)=(Pixel(width-1,-1)+Pixel(-1,height-1))>>1$
 $a =16\times{(Pixel(width-1,-1)+Pixel(-1,height-1))}$
