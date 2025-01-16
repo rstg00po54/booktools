@@ -10,7 +10,7 @@
 # 
 # 特性：
 # * 支持博客园/CSDN等常见博客的模版
-
+import tomd
 import traceback
 import os, sys
 import re
@@ -24,6 +24,7 @@ except:
 # sys.setrecursionlimit(1000000)
 
 class html2markdown():
+    hexo_title = ''
     # 定义DOM标签到Markdown标签的转换规则
     __rule_replacement = {
         '[document]'    : ('',''),
@@ -231,8 +232,10 @@ class html2markdown():
 
     # Convert Img element
     def _convertImg(self, tag, md_string):
+        # print("convert img " + self.hexo_title)
+        # print(tag)
         md_string += self.__rule_replacement['img'].format(tag.get('alt') or '', tag.get('src') or '')
-
+        # print(md_string)
         return md_string
 
     # 转换链接 a 元素
@@ -301,7 +304,7 @@ class html2markdown():
 
         md_string = ''
         if hexo_block:
-            hexo_title = container.find('h1', class_='postTitle').get_text().strip()
+            self.hexo_title = container.find('h1', class_='postTitle').get_text().strip()
             # print(html_string)
             match = re.search(r'<span[^>]*id="post-date"[^>]*>(.*?)</span>', html_string)
             # hexo_date = re.search(r'<span[^>]*id="post-date"[^>]*>(.*?)</span>', html_string).group(1)
@@ -311,11 +314,13 @@ class html2markdown():
             else:
                 hexo_date = '2024-1-1'
                 print("未匹配到日期")
+            hexo_title = self.hexo_title.replace(" ", "-")
+            print(hexo_title)
             hexo_top = '''---
 title: {hexo_title}
 date: {hexo_date}
 tag: 
----\n'''.format(hexo_title=hexo_title, hexo_date=hexo_date)
+---\n'''.format(hexo_title=self.hexo_title, hexo_date=hexo_date)
             container.find('h1', class_='postTitle').extract()
             md_string = hexo_top + md_string
 
@@ -325,13 +330,14 @@ tag:
 
     # Convert File entrance 
     def convertFile(self, income_file_path, outcome_folder = '', hexo_block = True):
-        # print('convertFile: in:  '+income_file_path)
-        # print('convertFile: out: '+outcome_folder)
+        print('convertFile: in:  '+income_file_path)
+        print('convertFile: out: '+outcome_folder)
         # print(income_file_path)
         with open(income_file_path) as html_file:
             html_string = html_file.read()
 
         md_string = self.convert(html_string)
+        # md_string=tomd.Tomd(html_string).markdown
 
         if outcome_folder != '':
             income_file_path = income_file_path.rstrip('.html').replace('（', '(').replace('）', ')')
@@ -345,7 +351,7 @@ tag:
 
     # Conver htmls under a folder
     def convertFolder(self, income_folder, outcome_folder = ''):
-        print('convertFolder'+income_folder+':'+outcome_folder)
+        print('convertFolder: '+income_folder+':'+outcome_folder)
         if not os.path.exists(income_folder):
             print("Income folder : " + income_folder + " does not exists!")
             return False

@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"window.title": "${rootNameShort} - ${activeEditorShort}" ,
+		"workbench.editor.enablePreview": true,
+		"liveServer.settings.port": 5501
+	}
+}

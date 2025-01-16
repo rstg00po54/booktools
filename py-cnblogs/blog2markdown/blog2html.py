@@ -10,7 +10,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import shutil
-
+from urllib.parse import urljoin
 class blog2html():
     html_path = ''
     markdown_path = ''
@@ -41,14 +41,16 @@ class blog2html():
 
         # 获取最新一篇文章链接
         # lastest_blog_link = self.get_latest_link(soup)
-        lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/category/1189649.html?page=2'
+        lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/category/1189649.html?page=1'
         # lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/p/10312476.html'
         
-
+        # self.getWeb("https://www.cnblogs.com/TaigaCon/p/3551001.html")
         # 递归获取链接内容，获取图片
         # 保存到指定目录和文件名格式
         # 文件名格式: yyyy-mm-dd-blog-name.html
         # self.get_all_posts(lastest_blog_link, url)
+        self.fileTitle(lastest_blog_link)
+        lastest_blog_link = 'https://www.cnblogs.com/TaigaCon/category/1189649.html?page=2'
         self.fileTitle(lastest_blog_link)
 
     def fileTitle(self, link):
@@ -65,6 +67,8 @@ class blog2html():
             title = entry.find('span', {'role': 'heading'}).get_text(strip=True)
             print(f"Title: {title}, Link: {link}")
             self.getWeb(link)
+            # break
+
 
     # 遍历抓取cnblogs博客
     def getWeb(self, blog_link):
@@ -210,29 +214,39 @@ class blog2html():
         my_headers = ''
         # if config['ua']:
         #     my_headers = config['ua']
-
+        print("file name "+blog_file_name)
         img_links = bs4_html.find_all('img')
         for img in img_links:
             # print(img.get('src').split('/')[-1])
+            # print(img.get('src'))
+            print("img::" + img.get('src'))
+            base_url="https:"
+            url = ''
+            if img.get('src').startswith("//"):
+                url = urljoin(base_url, img.get('src'))
             if re.search(r'http', img.get('src')):
+                url = img.get('src')
+            if url:
                 try:
-                    req = requests.get(img.get('src'), headers = my_headers, cookies = my_cookie)
-                    with open(markdown_path + "/" + img.get('src').split('/')[-1], 'wb') as f:
+                    req = requests.get(url, headers = my_headers, cookies = my_cookie)
+                    with open(markdown_path + "/" + url.split('/')[-1], 'wb') as f:
                         f.write(req.content)
                         f.close()
-                    # print('xxx'+html_path + "/" + img.get('src').split('/')[-1])
-                    with open(html_path + "/" + img.get('src').split('/')[-1], 'wb') as f:
+                    # print('xxx'+html_path + "/" + url.split('/')[-1])
+                    with open(html_path + "/" + url.split('/')[-1], 'wb') as f:
                         f.write(req.content)
                         f.close()
                     # print('xxx')
 
                     # 替换图片
                     new_img = bs4_html.new_tag("img")
-                    new_img['src'] = "" + blog_file_name.split('.')[0] + "/" + img.get('src').split('/')[-1]
+                    # filename.rsplit('.', 1)[0]
+                    new_img['src'] = "" + blog_file_name.rsplit('.', 1)[0] + "/" + url.split('/')[-1]
                     img.replace_with(new_img)
-                    # print("Get Image OK: " + img.get('src'))
+                    print(new_img)
+                    # print("Get Image OK: " + url)
                 except:
-                    print("Get Image Error: " + img.get('src'))
+                    print("Get Image Error: " + url)
 
         return bs4_html
 
